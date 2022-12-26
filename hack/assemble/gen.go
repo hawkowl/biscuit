@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"go/format"
 	"log"
@@ -14,6 +15,8 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/exp/maps"
 )
+
+const DEFAULT_EXTENSIONS = "i,zicsr"
 
 type Opcode struct {
 	Name      string
@@ -30,8 +33,6 @@ var msblsb, args *regexp.Regexp
 
 func fileProcess(data *Data, filename string) error {
 
-	log.Print(filename)
-
 	d, err := os.ReadFile(filename)
 	if err != nil {
 		return err
@@ -44,31 +45,47 @@ func fileProcess(data *Data, filename string) error {
 		ln, _, _ = strings.Cut(ln, "#")
 
 		// don't use blanks or care about psuedo-ops rn
-		if ln == "" || strings.HasPrefix(ln, "$pseudo_op") {
+		if ln == "" || strings.HasPrefix(ln, "$import") {
 			continue
+		}
+
+		if strings.HasPrefix(ln, "$pseudo_op") {
+			lns := strings.SplitN(ln, " ", 3)
+			oploc := strings.SplitN(lns[1], "::", 2)
+
+			if strings.HasPrefix(oploc[0], "rv128") || strings.HasPrefix(oploc[0], "rv64") {
+				log.Printf("processing psuedo-op %s", oploc[1])
+				ln = lns[2]
+			} else {
+				continue
+			}
 		}
 
 		op := Opcode{}
 		fields := make(map[string]int)
 
 		for i, f := range strings.Fields(ln) {
-			fmt.Println(f)
 			if i == 0 {
-				op.Name = f
+				op.Name = strings.Replace(f, ".", "_", -1)
 				continue
 			}
 
 			subs := msblsb.FindStringSubmatch(f)
 			if subs == nil {
+				found := false
 				for n, fieldname := range args.FindStringSubmatch(f) {
 					if fieldname == "" || n == 0 {
 						continue
 					}
 
 					fieldname = strings.ToUpper(fieldname)
-
 					op.Fields = append(op.Fields, [2]string{f, fieldname})
 					fields[fieldname] = 1
+					found = true
+				}
+
+				if !found {
+					log.Printf("!! couldn't find field for %s\n", f)
 				}
 			} else {
 				op.Bitfields = append(op.Bitfields, [2]string{
@@ -86,66 +103,64 @@ func fileProcess(data *Data, filename string) error {
 
 }
 
-func process(opcodesPath string) error {
+func process(opcodesPath string, extensions []string) error {
 
 	msblsb = regexp.MustCompile(`\s*(?P<msb>\d+.?)\.\.(?P<lsb>\d+.?)\s*=\s*(?P<val>\d[\w]*)[\s$]*`)
-	args = regexp.MustCompile(`\s?(?:(?:(?:j|b)?(imm(?:12|20))(?:hi|lo)?)+|(r(?:s\d|d))+)\s?`)
+	args = regexp.MustCompile(`\s?(?:(?:((?:j|b|z)?imm(?:12|20)?)(?:hi|lo)?)+|(r(?:s\d|d))+|(fm|pred|succ|csr|shamtw)+)\s?`)
 
-	o := &Data{
-		Opcodes: []Opcode{},
-	}
+	tmpl := template.Must(template.ParseFiles("hack/assemble/opcode_parser.tmpl"))
+
 	p, err := filepath.Abs(opcodesPath)
 	if err != nil {
 		return err
 	}
 
-	files, err := os.ReadDir(p)
-	if err != nil {
-		return err
-	}
+	for _, ext := range extensions {
 
-	for _, f := range files {
-		if f.IsDir() {
-			continue
+		log.Printf("processing %s", ext)
+
+		o := &Data{
+			Opcodes: []Opcode{},
 		}
-		n := filepath.Join(p, f.Name())
-
-		if strings.HasPrefix(f.Name(), "rv_i") {
-			err = fileProcess(o, n)
+		for _, r := range []string{"rv_", "rv32_"} {
+			err = fileProcess(o, filepath.Join(p, r+ext))
 			if err != nil {
-				return err
+				if errors.Is(err, os.ErrNotExist) {
+					log.Printf("skipping %s%s, doesn't exist", r, ext)
+				} else {
+					return err
+				}
 			}
 		}
 
-	}
-	tmpl := template.Must(template.ParseFiles("hack/assemble/opcode_parser.tmpl"))
+		var out bytes.Buffer
+		err = tmpl.Execute(&out, o)
+		if err != nil {
+			return err
+		}
 
-	var out bytes.Buffer
-	err = tmpl.Execute(&out, o)
-	if err != nil {
-		return err
+		formatted, err := format.Source(out.Bytes())
+		if err != nil {
+			return fmt.Errorf("failed to format: %w", err)
+		}
+
+		f, err := os.Create(fmt.Sprintf("pkg/assemble/opcodes_%s.go", ext))
+		if err != nil {
+			return err
+		}
+
+		_, err = f.WriteString(string(formatted))
+		if err != nil {
+			return err
+		}
+
+		err = f.Close()
+		if err != nil {
+			return err
+		}
+
 	}
 
-	formatted, err := format.Source(out.Bytes())
-	if err != nil {
-		//return fmt.Errorf("failed to format: %w", err)
-		formatted = out.Bytes()
-	}
-
-	f, err := os.Create("pkg/assemble/opcodes.go")
-	if err != nil {
-		return err
-	}
-
-	_, err = f.WriteString(string(formatted))
-	if err != nil {
-		return err
-	}
-
-	err = f.Close()
-	if err != nil {
-		return err
-	}
 	return nil
 }
 
@@ -160,10 +175,19 @@ func main() {
 				Name:  "opcodes",
 				Usage: "path to opcodes dir",
 			},
+			&cli.StringFlag{
+				Name:        "extensions",
+				Usage:       "extensions to generate for",
+				DefaultText: DEFAULT_EXTENSIONS,
+			},
 		},
 		Action: func(c *cli.Context) error {
-
-			return process(c.String("opcodes"))
+			s := c.String("extensions")
+			if s == "" {
+				s = DEFAULT_EXTENSIONS
+			}
+			ext := strings.Split(s, ",")
+			return process(c.String("opcodes"), ext)
 		},
 	}
 

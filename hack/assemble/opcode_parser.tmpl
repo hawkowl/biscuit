@@ -6,7 +6,7 @@ package assemble
 {{ range .Opcodes -}}
 type OP_{{ .Name }} struct {
 	{{ range .Args -}}
-		{{ . }} {{ if eq "IMM12" . }} int32 {{ else }} uint32 {{ end }}
+		{{ . }} {{ if eq "BIMM12" . }} int32 {{ else }} uint32 {{ end }}
 	{{ end -}}
 }
 

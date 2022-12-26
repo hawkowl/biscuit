@@ -42,8 +42,8 @@ func (o OP_auipc) Encode() (r uint32, err error) {
 }
 
 type OP_jal struct {
-	RD    uint32
-	IMM20 uint32
+	RD     uint32
+	JIMM20 uint32
 }
 
 func (o OP_jal) Encode() (r uint32, err error) {
@@ -51,7 +51,7 @@ func (o OP_jal) Encode() (r uint32, err error) {
 	if err != nil {
 		return
 	}
-	jimm20, err := GEN_jimm20(o.IMM20)
+	jimm20, err := GEN_jimm20(o.JIMM20)
 	if err != nil {
 		return
 	}
@@ -61,9 +61,9 @@ func (o OP_jal) Encode() (r uint32, err error) {
 }
 
 type OP_jalr struct {
-	RD    uint32
 	RS1   uint32
-	IMM12 int32
+	IMM12 uint32
+	RD    uint32
 }
 
 func (o OP_jalr) Encode() (r uint32, err error) {
@@ -85,13 +85,13 @@ func (o OP_jalr) Encode() (r uint32, err error) {
 }
 
 type OP_beq struct {
-	IMM12 int32
-	RS1   uint32
-	RS2   uint32
+	BIMM12 int32
+	RS1    uint32
+	RS2    uint32
 }
 
 func (o OP_beq) Encode() (r uint32, err error) {
-	bimm12hi, err := GEN_bimm12hi(o.IMM12)
+	bimm12hi, err := GEN_bimm12hi(o.BIMM12)
 	if err != nil {
 		return
 	}
@@ -103,7 +103,7 @@ func (o OP_beq) Encode() (r uint32, err error) {
 	if err != nil {
 		return
 	}
-	bimm12lo, err := GEN_bimm12lo(o.IMM12)
+	bimm12lo, err := GEN_bimm12lo(o.BIMM12)
 	if err != nil {
 		return
 	}
@@ -113,13 +113,13 @@ func (o OP_beq) Encode() (r uint32, err error) {
 }
 
 type OP_bne struct {
-	IMM12 int32
-	RS1   uint32
-	RS2   uint32
+	RS2    uint32
+	BIMM12 int32
+	RS1    uint32
 }
 
 func (o OP_bne) Encode() (r uint32, err error) {
-	bimm12hi, err := GEN_bimm12hi(o.IMM12)
+	bimm12hi, err := GEN_bimm12hi(o.BIMM12)
 	if err != nil {
 		return
 	}
@@ -131,7 +131,7 @@ func (o OP_bne) Encode() (r uint32, err error) {
 	if err != nil {
 		return
 	}
-	bimm12lo, err := GEN_bimm12lo(o.IMM12)
+	bimm12lo, err := GEN_bimm12lo(o.BIMM12)
 	if err != nil {
 		return
 	}
@@ -141,13 +141,13 @@ func (o OP_bne) Encode() (r uint32, err error) {
 }
 
 type OP_blt struct {
-	RS1   uint32
-	RS2   uint32
-	IMM12 int32
+	BIMM12 int32
+	RS1    uint32
+	RS2    uint32
 }
 
 func (o OP_blt) Encode() (r uint32, err error) {
-	bimm12hi, err := GEN_bimm12hi(o.IMM12)
+	bimm12hi, err := GEN_bimm12hi(o.BIMM12)
 	if err != nil {
 		return
 	}
@@ -159,7 +159,7 @@ func (o OP_blt) Encode() (r uint32, err error) {
 	if err != nil {
 		return
 	}
-	bimm12lo, err := GEN_bimm12lo(o.IMM12)
+	bimm12lo, err := GEN_bimm12lo(o.BIMM12)
 	if err != nil {
 		return
 	}
@@ -169,13 +169,13 @@ func (o OP_blt) Encode() (r uint32, err error) {
 }
 
 type OP_bge struct {
-	RS1   uint32
-	RS2   uint32
-	IMM12 int32
+	RS1    uint32
+	RS2    uint32
+	BIMM12 int32
 }
 
 func (o OP_bge) Encode() (r uint32, err error) {
-	bimm12hi, err := GEN_bimm12hi(o.IMM12)
+	bimm12hi, err := GEN_bimm12hi(o.BIMM12)
 	if err != nil {
 		return
 	}
@@ -187,7 +187,7 @@ func (o OP_bge) Encode() (r uint32, err error) {
 	if err != nil {
 		return
 	}
-	bimm12lo, err := GEN_bimm12lo(o.IMM12)
+	bimm12lo, err := GEN_bimm12lo(o.BIMM12)
 	if err != nil {
 		return
 	}
@@ -197,13 +197,13 @@ func (o OP_bge) Encode() (r uint32, err error) {
 }
 
 type OP_bltu struct {
-	IMM12 int32
-	RS1   uint32
-	RS2   uint32
+	BIMM12 int32
+	RS1    uint32
+	RS2    uint32
 }
 
 func (o OP_bltu) Encode() (r uint32, err error) {
-	bimm12hi, err := GEN_bimm12hi(o.IMM12)
+	bimm12hi, err := GEN_bimm12hi(o.BIMM12)
 	if err != nil {
 		return
 	}
@@ -215,7 +215,7 @@ func (o OP_bltu) Encode() (r uint32, err error) {
 	if err != nil {
 		return
 	}
-	bimm12lo, err := GEN_bimm12lo(o.IMM12)
+	bimm12lo, err := GEN_bimm12lo(o.BIMM12)
 	if err != nil {
 		return
 	}
@@ -225,13 +225,13 @@ func (o OP_bltu) Encode() (r uint32, err error) {
 }
 
 type OP_bgeu struct {
-	IMM12 int32
-	RS1   uint32
-	RS2   uint32
+	BIMM12 int32
+	RS1    uint32
+	RS2    uint32
 }
 
 func (o OP_bgeu) Encode() (r uint32, err error) {
-	bimm12hi, err := GEN_bimm12hi(o.IMM12)
+	bimm12hi, err := GEN_bimm12hi(o.BIMM12)
 	if err != nil {
 		return
 	}
@@ -243,7 +243,7 @@ func (o OP_bgeu) Encode() (r uint32, err error) {
 	if err != nil {
 		return
 	}
-	bimm12lo, err := GEN_bimm12lo(o.IMM12)
+	bimm12lo, err := GEN_bimm12lo(o.BIMM12)
 	if err != nil {
 		return
 	}
@@ -253,9 +253,9 @@ func (o OP_bgeu) Encode() (r uint32, err error) {
 }
 
 type OP_lb struct {
-	RD    uint32
 	RS1   uint32
-	IMM12 int32
+	IMM12 uint32
+	RD    uint32
 }
 
 func (o OP_lb) Encode() (r uint32, err error) {
@@ -279,7 +279,7 @@ func (o OP_lb) Encode() (r uint32, err error) {
 type OP_lh struct {
 	RD    uint32
 	RS1   uint32
-	IMM12 int32
+	IMM12 uint32
 }
 
 func (o OP_lh) Encode() (r uint32, err error) {
@@ -301,9 +301,9 @@ func (o OP_lh) Encode() (r uint32, err error) {
 }
 
 type OP_lw struct {
-	RS1   uint32
-	IMM12 int32
 	RD    uint32
+	RS1   uint32
+	IMM12 uint32
 }
 
 func (o OP_lw) Encode() (r uint32, err error) {
@@ -325,9 +325,9 @@ func (o OP_lw) Encode() (r uint32, err error) {
 }
 
 type OP_lbu struct {
+	IMM12 uint32
 	RD    uint32
 	RS1   uint32
-	IMM12 int32
 }
 
 func (o OP_lbu) Encode() (r uint32, err error) {
@@ -349,9 +349,9 @@ func (o OP_lbu) Encode() (r uint32, err error) {
 }
 
 type OP_lhu struct {
-	IMM12 int32
 	RD    uint32
 	RS1   uint32
+	IMM12 uint32
 }
 
 func (o OP_lhu) Encode() (r uint32, err error) {
@@ -373,7 +373,7 @@ func (o OP_lhu) Encode() (r uint32, err error) {
 }
 
 type OP_sb struct {
-	IMM12 int32
+	IMM12 uint32
 	RS1   uint32
 	RS2   uint32
 }
@@ -402,7 +402,7 @@ func (o OP_sb) Encode() (r uint32, err error) {
 
 type OP_sh struct {
 	RS2   uint32
-	IMM12 int32
+	IMM12 uint32
 	RS1   uint32
 }
 
@@ -429,7 +429,7 @@ func (o OP_sh) Encode() (r uint32, err error) {
 }
 
 type OP_sw struct {
-	IMM12 int32
+	IMM12 uint32
 	RS1   uint32
 	RS2   uint32
 }
@@ -457,9 +457,9 @@ func (o OP_sw) Encode() (r uint32, err error) {
 }
 
 type OP_addi struct {
-	RS1   uint32
-	IMM12 int32
 	RD    uint32
+	RS1   uint32
+	IMM12 uint32
 }
 
 func (o OP_addi) Encode() (r uint32, err error) {
@@ -481,9 +481,9 @@ func (o OP_addi) Encode() (r uint32, err error) {
 }
 
 type OP_slti struct {
-	RD    uint32
 	RS1   uint32
-	IMM12 int32
+	IMM12 uint32
+	RD    uint32
 }
 
 func (o OP_slti) Encode() (r uint32, err error) {
@@ -507,7 +507,7 @@ func (o OP_slti) Encode() (r uint32, err error) {
 type OP_sltiu struct {
 	RD    uint32
 	RS1   uint32
-	IMM12 int32
+	IMM12 uint32
 }
 
 func (o OP_sltiu) Encode() (r uint32, err error) {
@@ -531,7 +531,7 @@ func (o OP_sltiu) Encode() (r uint32, err error) {
 type OP_xori struct {
 	RD    uint32
 	RS1   uint32
-	IMM12 int32
+	IMM12 uint32
 }
 
 func (o OP_xori) Encode() (r uint32, err error) {
@@ -553,9 +553,9 @@ func (o OP_xori) Encode() (r uint32, err error) {
 }
 
 type OP_ori struct {
-	RS1   uint32
-	IMM12 int32
 	RD    uint32
+	RS1   uint32
+	IMM12 uint32
 }
 
 func (o OP_ori) Encode() (r uint32, err error) {
@@ -579,7 +579,7 @@ func (o OP_ori) Encode() (r uint32, err error) {
 type OP_andi struct {
 	RD    uint32
 	RS1   uint32
-	IMM12 int32
+	IMM12 uint32
 }
 
 func (o OP_andi) Encode() (r uint32, err error) {
@@ -625,9 +625,9 @@ func (o OP_add) Encode() (r uint32, err error) {
 }
 
 type OP_sub struct {
-	RS2 uint32
 	RD  uint32
 	RS1 uint32
+	RS2 uint32
 }
 
 func (o OP_sub) Encode() (r uint32, err error) {
@@ -673,9 +673,9 @@ func (o OP_sll) Encode() (r uint32, err error) {
 }
 
 type OP_slt struct {
+	RD  uint32
 	RS1 uint32
 	RS2 uint32
-	RD  uint32
 }
 
 func (o OP_slt) Encode() (r uint32, err error) {
@@ -697,9 +697,9 @@ func (o OP_slt) Encode() (r uint32, err error) {
 }
 
 type OP_sltu struct {
+	RS2 uint32
 	RD  uint32
 	RS1 uint32
-	RS2 uint32
 }
 
 func (o OP_sltu) Encode() (r uint32, err error) {
@@ -817,9 +817,9 @@ func (o OP_or) Encode() (r uint32, err error) {
 }
 
 type OP_and struct {
-	RS1 uint32
 	RS2 uint32
 	RD  uint32
+	RS1 uint32
 }
 
 func (o OP_and) Encode() (r uint32, err error) {
@@ -841,11 +841,26 @@ func (o OP_and) Encode() (r uint32, err error) {
 }
 
 type OP_fence struct {
-	RS1 uint32
-	RD  uint32
+	FM   uint32
+	PRED uint32
+	SUCC uint32
+	RS1  uint32
+	RD   uint32
 }
 
 func (o OP_fence) Encode() (r uint32, err error) {
+	fm, err := GEN_fm(o.FM)
+	if err != nil {
+		return
+	}
+	pred, err := GEN_pred(o.PRED)
+	if err != nil {
+		return
+	}
+	succ, err := GEN_succ(o.SUCC)
+	if err != nil {
+		return
+	}
 	rs1, err := GEN_rs1(o.RS1)
 	if err != nil {
 		return
@@ -855,7 +870,7 @@ func (o OP_fence) Encode() (r uint32, err error) {
 		return
 	}
 
-	r = r | rs1 | rd | (0 << 12) | (0x03 << 2) | (3)
+	r = r | fm | pred | succ | rs1 | rd | (0 << 12) | (0x03 << 2) | (3)
 	return
 }
 
@@ -874,5 +889,77 @@ type OP_ebreak struct {
 func (o OP_ebreak) Encode() (r uint32, err error) {
 
 	r = r | (0x001 << 20) | (0 << 7) | (0x1C << 2) | (3)
+	return
+}
+
+type OP_slli struct {
+	RD     uint32
+	RS1    uint32
+	SHAMTW uint32
+}
+
+func (o OP_slli) Encode() (r uint32, err error) {
+	rd, err := GEN_rd(o.RD)
+	if err != nil {
+		return
+	}
+	rs1, err := GEN_rs1(o.RS1)
+	if err != nil {
+		return
+	}
+	shamtw, err := GEN_shamtw(o.SHAMTW)
+	if err != nil {
+		return
+	}
+
+	r = r | rd | rs1 | shamtw | (0 << 25) | (1 << 12) | (0x04 << 2) | (3)
+	return
+}
+
+type OP_srli struct {
+	RD     uint32
+	RS1    uint32
+	SHAMTW uint32
+}
+
+func (o OP_srli) Encode() (r uint32, err error) {
+	rd, err := GEN_rd(o.RD)
+	if err != nil {
+		return
+	}
+	rs1, err := GEN_rs1(o.RS1)
+	if err != nil {
+		return
+	}
+	shamtw, err := GEN_shamtw(o.SHAMTW)
+	if err != nil {
+		return
+	}
+
+	r = r | rd | rs1 | shamtw | (0 << 25) | (5 << 12) | (0x04 << 2) | (3)
+	return
+}
+
+type OP_srai struct {
+	RD     uint32
+	RS1    uint32
+	SHAMTW uint32
+}
+
+func (o OP_srai) Encode() (r uint32, err error) {
+	rd, err := GEN_rd(o.RD)
+	if err != nil {
+		return
+	}
+	rs1, err := GEN_rs1(o.RS1)
+	if err != nil {
+		return
+	}
+	shamtw, err := GEN_shamtw(o.SHAMTW)
+	if err != nil {
+		return
+	}
+
+	r = r | rd | rs1 | shamtw | (32 << 25) | (5 << 12) | (0x04 << 2) | (3)
 	return
 }

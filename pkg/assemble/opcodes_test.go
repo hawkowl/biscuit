@@ -1,27 +1,53 @@
 package assemble
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 )
 
 func TestOpcodes(t *testing.T) {
-	o := OP_beq{
-		IMM12: -20,
-		RS2:   14,
-		RS1:   15,
+	testCases := []struct {
+		input    Opcode
+		expected uint32
+	}{
+		{
+			input: OP_beq{
+				BIMM12: -20,
+				RS2:    14,
+				RS1:    15,
+			},
+			expected: 0xfee786e3,
+		},
+		{
+			input: OP_addi{
+				RD:    7,
+				RS1:   7,
+				IMM12: 1656,
+			},
+			expected: 0x67838393,
+		},
+		{
+			input: OP_slli{
+				RD:     14,
+				RS1:    10,
+				SHAMTW: 2,
+			},
+			expected: 0x00251713,
+		},
 	}
+	for _, tC := range testCases {
+		funcName := fmt.Sprintf("%#v", tC.input)
 
-	r, err := o.Encode()
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	expected := uint32(0xfee786e3)
-
-	if r != expected {
-		t.Fatalf("%032b not %032b", r, expected)
+		t.Run(funcName, func(t *testing.T) {
+			out, err := tC.input.Encode()
+			if err != nil {
+				t.Fatal(err)
+			}
+			if out != tC.expected {
+				t.Errorf("got %032b (0x%08X), wanted %032b (0x%08X)", out, out, tC.expected, tC.expected)
+			}
+		})
 	}
 }
 

@@ -5,6 +5,10 @@ import (
 	"math/bits"
 )
 
+type Opcode interface {
+	Encode() (uint32, error)
+}
+
 func FitsIn(inp uint32, nbits int) (uint32, error) {
 	if bits.Len32(inp) > nbits {
 		return 0, fmt.Errorf("%d does not fit in %d bits", inp, nbits)
@@ -18,18 +22,18 @@ func GEN_imm20(inp uint32) (uint32, error) {
 	return i << 12, err
 }
 
-func GEN_imm12(inp int32) (uint32, error) {
-	i, err := immI(inp, 13)
-	return i, err
+func GEN_imm12(inp uint32) (uint32, error) {
+	i, err := FitsIn(inp, 12)
+	return i << 20, err
 }
 
-func GEN_imm12hi(inp int32) (uint32, error) {
-	i, err := immI(inp, 13)
+func GEN_imm12hi(inp uint32) (uint32, error) {
+	i, err := FitsIn(inp, 12)
 	return (i >> 5) << 25, err
 }
 
-func GEN_imm12lo(inp int32) (uint32, error) {
-	i, err := immI(inp, 13)
+func GEN_imm12lo(inp uint32) (uint32, error) {
+	i, err := FitsIn(inp, 12)
 	return (i & 0x1f) << 7, err
 }
 
@@ -74,6 +78,21 @@ func GEN_rs1(inp uint32) (uint32, error) {
 }
 
 func GEN_rs2(inp uint32) (uint32, error) {
+	i, err := FitsIn(inp, 5)
+	return i << 20, err
+}
+
+func GEN_csr(inp uint32) (uint32, error) {
+	i, err := FitsIn(inp, 12)
+	return i << 20, err
+}
+
+func GEN_zimm(inp uint32) (uint32, error) {
+	i, err := FitsIn(inp, 5)
+	return i << 20, err
+}
+
+func GEN_shamtw(inp uint32) (uint32, error) {
 	i, err := FitsIn(inp, 5)
 	return i << 20, err
 }
