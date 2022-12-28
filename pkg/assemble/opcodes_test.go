@@ -12,28 +12,24 @@ func TestOpcodes(t *testing.T) {
 		expected uint32
 	}{
 		{
-			input: OP_beq{
-				BIMM12: -20,
-				RS2:    14,
-				RS1:    15,
-			},
+			input:    BEQ(-20, 15, 14),
 			expected: 0xfee786e3,
 		},
 		{
-			input: OP_addi{
-				RD:    7,
-				RS1:   7,
-				IMM12: 1656,
-			},
+			input:    ADDI(7, 7, 1656),
 			expected: 0x67838393,
 		},
 		{
-			input: OP_slli{
-				RD:     14,
-				RS1:    10,
-				SHAMTW: 2,
-			},
+			input:    SLLI(14, 10, 2),
 			expected: 0x00251713,
+		},
+		{
+			input:    JAL(1, -96),
+			expected: 0xfa1ff0ef,
+		},
+		{
+			input:    JAL(0, 9128),
+			expected: 0x3a80206f,
 		},
 	}
 	for _, tC := range testCases {
@@ -59,39 +55,37 @@ func TestOpcodePortions(t *testing.T) {
 	}{
 		{
 			input:  0b11110000,
-			f:      GEN_pred,
+			f:      GEN_PRED,
 			result: 0xF000000,
 		},
 		{
 			input:  0b1111,
-			f:      GEN_succ,
+			f:      GEN_SUCC,
 			result: 0xF00000,
 		},
 		{
 			input:  0b111100000000,
-			f:      GEN_fm,
+			f:      GEN_FM,
 			result: 0xF0000000,
 		},
 		{
 			input:  0b11111,
-			f:      GEN_rd,
+			f:      GEN_RD,
 			result: 0b111110000000,
 		},
 		{
 			input:  0b11111,
-			f:      GEN_rs1,
+			f:      GEN_RS1,
 			result: 0b11111000000000000000,
 		},
 		{
 			input:  0b11111,
-			f:      GEN_rs2,
+			f:      GEN_RS2,
 			result: 0b1111100000000000000000000,
 		},
 	}
 	for _, tC := range testCases {
-
 		funcName := reflect.ValueOf(tC.f).Kind().String()
-
 		t.Run(funcName, func(t *testing.T) {
 			out, err := tC.f(tC.input)
 			if err != nil {

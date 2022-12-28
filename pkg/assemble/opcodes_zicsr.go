@@ -3,146 +3,196 @@
 
 package assemble
 
-type OP_csrrw struct {
-	RD  uint32
-	RS1 uint32
-	CSR uint32
+import "github.com/hawkowl/biscuit/pkg/opcodes"
+
+type OP_CSRRW struct {
+	opcodes.OP_CSRRW
 }
 
-func (o OP_csrrw) Encode() (r uint32, err error) {
-	rd, err := GEN_rd(o.RD)
+func CSRRW(RD uint32, RS1 uint32, CSR uint32) OP_CSRRW {
+	return OP_CSRRW{
+		opcodes.OP_CSRRW{
+			RD:  RD,
+			RS1: RS1,
+			CSR: CSR,
+		},
+	}
+}
+
+func (o OP_CSRRW) Encode() (r uint32, err error) {
+	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return
 	}
-	rs1, err := GEN_rs1(o.RS1)
+	RS1, err := GEN_RS1(o.RS1)
 	if err != nil {
 		return
 	}
-	csr, err := GEN_csr(o.CSR)
+	CSR, err := GEN_CSR(o.CSR)
 	if err != nil {
 		return
 	}
 
-	r = r | rd | rs1 | csr | (1 << 12) | (0x1C << 2) | (3)
+	r = r | RD | RS1 | CSR | (1 << 12) | (0x1C << 2) | (3)
 	return
 }
 
-type OP_csrrs struct {
-	RD  uint32
-	RS1 uint32
-	CSR uint32
+type OP_CSRRS struct {
+	opcodes.OP_CSRRS
 }
 
-func (o OP_csrrs) Encode() (r uint32, err error) {
-	rd, err := GEN_rd(o.RD)
+func CSRRS(RD uint32, RS1 uint32, CSR uint32) OP_CSRRS {
+	return OP_CSRRS{
+		opcodes.OP_CSRRS{
+			RD:  RD,
+			RS1: RS1,
+			CSR: CSR,
+		},
+	}
+}
+
+func (o OP_CSRRS) Encode() (r uint32, err error) {
+	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return
 	}
-	rs1, err := GEN_rs1(o.RS1)
+	RS1, err := GEN_RS1(o.RS1)
 	if err != nil {
 		return
 	}
-	csr, err := GEN_csr(o.CSR)
+	CSR, err := GEN_CSR(o.CSR)
 	if err != nil {
 		return
 	}
 
-	r = r | rd | rs1 | csr | (2 << 12) | (0x1C << 2) | (3)
+	r = r | RD | RS1 | CSR | (2 << 12) | (0x1C << 2) | (3)
 	return
 }
 
-type OP_csrrc struct {
-	RD  uint32
-	RS1 uint32
-	CSR uint32
+type OP_CSRRC struct {
+	opcodes.OP_CSRRC
 }
 
-func (o OP_csrrc) Encode() (r uint32, err error) {
-	rd, err := GEN_rd(o.RD)
+func CSRRC(RD uint32, RS1 uint32, CSR uint32) OP_CSRRC {
+	return OP_CSRRC{
+		opcodes.OP_CSRRC{
+			RD:  RD,
+			RS1: RS1,
+			CSR: CSR,
+		},
+	}
+}
+
+func (o OP_CSRRC) Encode() (r uint32, err error) {
+	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return
 	}
-	rs1, err := GEN_rs1(o.RS1)
+	RS1, err := GEN_RS1(o.RS1)
 	if err != nil {
 		return
 	}
-	csr, err := GEN_csr(o.CSR)
+	CSR, err := GEN_CSR(o.CSR)
 	if err != nil {
 		return
 	}
 
-	r = r | rd | rs1 | csr | (3 << 12) | (0x1C << 2) | (3)
+	r = r | RD | RS1 | CSR | (3 << 12) | (0x1C << 2) | (3)
 	return
 }
 
-type OP_csrrwi struct {
-	CSR  uint32
-	ZIMM uint32
-	RD   uint32
+type OP_CSRRWI struct {
+	opcodes.OP_CSRRWI
 }
 
-func (o OP_csrrwi) Encode() (r uint32, err error) {
-	rd, err := GEN_rd(o.RD)
+func CSRRWI(RD uint32, CSR uint32, ZIMM uint32) OP_CSRRWI {
+	return OP_CSRRWI{
+		opcodes.OP_CSRRWI{
+			RD:   RD,
+			CSR:  CSR,
+			ZIMM: ZIMM,
+		},
+	}
+}
+
+func (o OP_CSRRWI) Encode() (r uint32, err error) {
+	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return
 	}
-	csr, err := GEN_csr(o.CSR)
+	CSR, err := GEN_CSR(o.CSR)
 	if err != nil {
 		return
 	}
-	zimm, err := GEN_zimm(o.ZIMM)
+	ZIMM, err := GEN_ZIMM(o.ZIMM)
 	if err != nil {
 		return
 	}
 
-	r = r | rd | csr | zimm | (5 << 12) | (0x1C << 2) | (3)
+	r = r | RD | CSR | ZIMM | (5 << 12) | (0x1C << 2) | (3)
 	return
 }
 
-type OP_csrrsi struct {
-	CSR  uint32
-	ZIMM uint32
-	RD   uint32
+type OP_CSRRSI struct {
+	opcodes.OP_CSRRSI
 }
 
-func (o OP_csrrsi) Encode() (r uint32, err error) {
-	rd, err := GEN_rd(o.RD)
+func CSRRSI(RD uint32, CSR uint32, ZIMM uint32) OP_CSRRSI {
+	return OP_CSRRSI{
+		opcodes.OP_CSRRSI{
+			RD:   RD,
+			CSR:  CSR,
+			ZIMM: ZIMM,
+		},
+	}
+}
+
+func (o OP_CSRRSI) Encode() (r uint32, err error) {
+	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return
 	}
-	csr, err := GEN_csr(o.CSR)
+	CSR, err := GEN_CSR(o.CSR)
 	if err != nil {
 		return
 	}
-	zimm, err := GEN_zimm(o.ZIMM)
+	ZIMM, err := GEN_ZIMM(o.ZIMM)
 	if err != nil {
 		return
 	}
 
-	r = r | rd | csr | zimm | (6 << 12) | (0x1C << 2) | (3)
+	r = r | RD | CSR | ZIMM | (6 << 12) | (0x1C << 2) | (3)
 	return
 }
 
-type OP_csrrci struct {
-	RD   uint32
-	CSR  uint32
-	ZIMM uint32
+type OP_CSRRCI struct {
+	opcodes.OP_CSRRCI
 }
 
-func (o OP_csrrci) Encode() (r uint32, err error) {
-	rd, err := GEN_rd(o.RD)
+func CSRRCI(RD uint32, CSR uint32, ZIMM uint32) OP_CSRRCI {
+	return OP_CSRRCI{
+		opcodes.OP_CSRRCI{
+			RD:   RD,
+			CSR:  CSR,
+			ZIMM: ZIMM,
+		},
+	}
+}
+
+func (o OP_CSRRCI) Encode() (r uint32, err error) {
+	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return
 	}
-	csr, err := GEN_csr(o.CSR)
+	CSR, err := GEN_CSR(o.CSR)
 	if err != nil {
 		return
 	}
-	zimm, err := GEN_zimm(o.ZIMM)
+	ZIMM, err := GEN_ZIMM(o.ZIMM)
 	if err != nil {
 		return
 	}
 
-	r = r | rd | csr | zimm | (7 << 12) | (0x1C << 2) | (3)
+	r = r | RD | CSR | ZIMM | (7 << 12) | (0x1C << 2) | (3)
 	return
 }
