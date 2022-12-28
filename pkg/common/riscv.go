@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package assemble
+package common
 
 import "fmt"
 
@@ -32,7 +32,7 @@ func immIFits[W int32 | int64](x W, nbits uint) bool {
 }
 
 // immI extracts the signed integer of the specified size from an immediate.
-func immI[W int32 | int64](imm W, nbits uint) (uint32, error) {
+func ImmI[W int32 | int64](imm W, nbits uint) (uint32, error) {
 	if !immIFits(imm, nbits) {
 		return 0, fmt.Errorf("signed immediate %d cannot fit in %d bits", imm, nbits)
 	}
@@ -40,8 +40,16 @@ func immI[W int32 | int64](imm W, nbits uint) (uint32, error) {
 }
 
 // signExtend sign extends val starting at bit bit.
-func signExtend(val int64, bit uint) int64 {
-	return val << (64 - bit) >> (64 - bit)
+func SignExtend[inp uint32 | int64, W int32 | int64](val inp, bit uint) W {
+	switch any(val).(type) {
+	case uint32:
+		return W(int32(val) << (32 - bit) >> (32 - bit))
+	case int64:
+		return W(val << (64 - bit) >> (64 - bit))
+	default:
+		// wot
+		return 0
+	}
 }
 
 // Split32BitImmediate splits a signed 32-bit immediate into a signed 20-bit
@@ -73,8 +81,8 @@ func Split32BitImmediate(imm int64) (low, high int64, err error) {
 		high++
 	}
 
-	low = signExtend(imm, 12)
-	high = signExtend(high, 20)
+	low = SignExtend[int64, int64](imm, 12)
+	high = SignExtend[int64, int64](high, 20)
 
 	return low, high, nil
 }
