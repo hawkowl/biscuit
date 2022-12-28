@@ -3,12 +3,26 @@
 
 package assemble
 
+import "github.com/hawkowl/biscuit/pkg/opcodes"
+
 {{ range .Opcodes -}}
 type OP_{{ .Name }} struct {
-	{{ range .Args -}}
-		{{ . }} {{ if eq "BIMM12" . }} int32 {{ else }} uint32 {{ end }}
-	{{ end -}}
+	opcodes.OP_{{ .Name }}
 }
+
+func {{ .Name }}({{ range .Args -}}
+		{{ index . 0 }} {{ index . 1 }},
+	{{- end -}}) OP_{{ .Name }} {
+	return OP_{{ .Name }}{
+		opcodes.OP_{{ .Name }}{
+		{{ range .Args -}}
+			{{ index . 0 }}: {{ index . 0 }},
+		{{ end -}}
+		},
+	}
+}
+
+
 
 func (o OP_{{.Name}}) Encode() (r uint32, err error) {
 {{ range .Fields -}}
@@ -23,9 +37,9 @@ func (o OP_{{.Name}}) Encode() (r uint32, err error) {
 	| {{ index . 0 }}
 {{- end -}}
 	{{- range .Bitfields -}}
-		| ({{ index . 1 }}
-		{{- if index . 0 | ne "0" -}}
-			<< {{ index . 0 }}
+		| ({{ index . 2 }}
+		{{- if index . 1 | ne "0" -}}
+			<< {{ index . 1 }}
 		{{- end -}})
 	{{- end }}
 	return

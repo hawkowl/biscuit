@@ -13,16 +13,15 @@ import (
 	"text/template"
 
 	"github.com/urfave/cli/v2"
-	"golang.org/x/exp/maps"
 )
 
 const DEFAULT_EXTENSIONS = "i,zicsr"
 
 type Opcode struct {
 	Name      string
-	Args      []string
+	Args      [][2]string
 	Fields    [][2]string
-	Bitfields [][2]string
+	Bitfields [][3]string
 }
 
 type Data struct {
@@ -63,10 +62,11 @@ func fileProcess(data *Data, filename string) error {
 
 		op := Opcode{}
 		fields := make(map[string]int)
+		fieldNames := make([][2]string, 0)
 
 		for i, f := range strings.Fields(ln) {
 			if i == 0 {
-				op.Name = strings.Replace(f, ".", "_", -1)
+				op.Name = strings.ToUpper(strings.Replace(f, ".", "_", -1))
 				continue
 			}
 
@@ -79,8 +79,19 @@ func fileProcess(data *Data, filename string) error {
 					}
 
 					fieldname = strings.ToUpper(fieldname)
-					op.Fields = append(op.Fields, [2]string{f, fieldname})
-					fields[fieldname] = 1
+					op.Fields = append(op.Fields, [2]string{strings.ToUpper(f), fieldname})
+
+					_, ok := fields[fieldname]
+					if !ok {
+						fields[fieldname] = 1
+						if fieldname == "BIMM12" || fieldname == "IMM12" || fieldname == "JIMM20" {
+							fieldNames = append(fieldNames, [2]string{fieldname, "int32"})
+
+						} else {
+							fieldNames = append(fieldNames, [2]string{fieldname, "uint32"})
+						}
+					}
+
 					found = true
 				}
 
@@ -88,13 +99,13 @@ func fileProcess(data *Data, filename string) error {
 					log.Printf("!! couldn't find field for %s\n", f)
 				}
 			} else {
-				op.Bitfields = append(op.Bitfields, [2]string{
-					subs[2], subs[3],
+				op.Bitfields = append(op.Bitfields, [3]string{
+					subs[1], subs[2], subs[3],
 				})
 			}
 		}
 
-		op.Args = maps.Keys(fields)
+		op.Args = fieldNames
 		data.Opcodes = append(data.Opcodes, op)
 
 	}
@@ -103,12 +114,29 @@ func fileProcess(data *Data, filename string) error {
 
 }
 
+func writeFile(tmpl *template.Template, data *Data, dest string) error {
+	var out bytes.Buffer
+	err := tmpl.Execute(&out, data)
+	if err != nil {
+		return err
+	}
+
+	formatted, err := format.Source(out.Bytes())
+	if err != nil {
+		return fmt.Errorf("failed to format %s: %w", dest, err)
+	}
+
+	return os.WriteFile(dest, formatted, 0666)
+}
+
 func process(opcodesPath string, extensions []string) error {
 
 	msblsb = regexp.MustCompile(`\s*(?P<msb>\d+.?)\.\.(?P<lsb>\d+.?)\s*=\s*(?P<val>\d[\w]*)[\s$]*`)
 	args = regexp.MustCompile(`\s?(?:(?:((?:j|b|z)?imm(?:12|20)?)(?:hi|lo)?)+|(r(?:s\d|d))+|(fm|pred|succ|csr|shamtw)+)\s?`)
 
-	tmpl := template.Must(template.ParseFiles("hack/assemble/opcode_parser.tmpl"))
+	tmplEncode := template.Must(template.ParseFiles("hack/assemble/opcode_encode.tmpl"))
+	tmplDecode := template.Must(template.ParseFiles("hack/assemble/opcode_decode.tmpl"))
+	tmplDefs := template.Must(template.ParseFiles("hack/assemble/opcode_defs.tmpl"))
 
 	p, err := filepath.Abs(opcodesPath)
 	if err != nil {
@@ -133,28 +161,17 @@ func process(opcodesPath string, extensions []string) error {
 			}
 		}
 
-		var out bytes.Buffer
-		err = tmpl.Execute(&out, o)
+		err = writeFile(tmplEncode, o, fmt.Sprintf("pkg/assemble/opcodes_%s.go", ext))
 		if err != nil {
 			return err
 		}
 
-		formatted, err := format.Source(out.Bytes())
-		if err != nil {
-			return fmt.Errorf("failed to format: %w", err)
-		}
-
-		f, err := os.Create(fmt.Sprintf("pkg/assemble/opcodes_%s.go", ext))
+		err = writeFile(tmplDecode, o, fmt.Sprintf("pkg/disassemble/opcodes_%s.go", ext))
 		if err != nil {
 			return err
 		}
 
-		_, err = f.WriteString(string(formatted))
-		if err != nil {
-			return err
-		}
-
-		err = f.Close()
+		err = writeFile(tmplDefs, o, fmt.Sprintf("pkg/opcodes/opcodes_%s.go", ext))
 		if err != nil {
 			return err
 		}
