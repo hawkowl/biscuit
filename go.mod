@@ -2,7 +2,10 @@ module github.com/hawkowl/biscuit
 
 go 1.19
 
-require github.com/urfave/cli/v2 v2.23.7
+require (
+	github.com/go-test/deep v1.1.0
+	github.com/urfave/cli/v2 v2.23.7
+)
 
 require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
