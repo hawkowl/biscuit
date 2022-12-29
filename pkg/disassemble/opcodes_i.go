@@ -9,6 +9,10 @@ type OP_LUI struct {
 	opcodes.OP_LUI
 }
 
+func (o OP_LUI) Describe() string {
+	return "LUI"
+}
+
 func LUI(RD uint32, IMM20 uint32, debug DebugInfo) OP_LUI {
 	return OP_LUI{
 		opcodes.OP_LUI{
@@ -30,6 +34,10 @@ func DecodeLUI(inst uint32) OP_LUI {
 
 type OP_AUIPC struct {
 	opcodes.OP_AUIPC
+}
+
+func (o OP_AUIPC) Describe() string {
+	return "AUIPC"
 }
 
 func AUIPC(RD uint32, IMM20 uint32, debug DebugInfo) OP_AUIPC {
@@ -55,6 +63,10 @@ type OP_JAL struct {
 	opcodes.OP_JAL
 }
 
+func (o OP_JAL) Describe() string {
+	return "JAL"
+}
+
 func JAL(RD uint32, JIMM20 int32, debug DebugInfo) OP_JAL {
 	return OP_JAL{
 		opcodes.OP_JAL{
@@ -76,6 +88,10 @@ func DecodeJAL(inst uint32) OP_JAL {
 
 type OP_JALR struct {
 	opcodes.OP_JALR
+}
+
+func (o OP_JALR) Describe() string {
+	return "JALR"
 }
 
 func JALR(RD uint32, RS1 uint32, IMM12 int32, debug DebugInfo) OP_JALR {
@@ -101,6 +117,10 @@ func DecodeJALR(inst uint32) OP_JALR {
 
 type OP_BEQ struct {
 	opcodes.OP_BEQ
+}
+
+func (o OP_BEQ) Describe() string {
+	return "BEQ"
 }
 
 func BEQ(BIMM12 int32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_BEQ {
@@ -129,6 +149,10 @@ type OP_BNE struct {
 	opcodes.OP_BNE
 }
 
+func (o OP_BNE) Describe() string {
+	return "BNE"
+}
+
 func BNE(BIMM12 int32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_BNE {
 	return OP_BNE{
 		opcodes.OP_BNE{
@@ -153,6 +177,10 @@ func DecodeBNE(inst uint32) OP_BNE {
 
 type OP_BLT struct {
 	opcodes.OP_BLT
+}
+
+func (o OP_BLT) Describe() string {
+	return "BLT"
 }
 
 func BLT(BIMM12 int32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_BLT {
@@ -181,6 +209,10 @@ type OP_BGE struct {
 	opcodes.OP_BGE
 }
 
+func (o OP_BGE) Describe() string {
+	return "BGE"
+}
+
 func BGE(BIMM12 int32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_BGE {
 	return OP_BGE{
 		opcodes.OP_BGE{
@@ -205,6 +237,10 @@ func DecodeBGE(inst uint32) OP_BGE {
 
 type OP_BLTU struct {
 	opcodes.OP_BLTU
+}
+
+func (o OP_BLTU) Describe() string {
+	return "BLTU"
 }
 
 func BLTU(BIMM12 int32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_BLTU {
@@ -233,6 +269,10 @@ type OP_BGEU struct {
 	opcodes.OP_BGEU
 }
 
+func (o OP_BGEU) Describe() string {
+	return "BGEU"
+}
+
 func BGEU(BIMM12 int32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_BGEU {
 	return OP_BGEU{
 		opcodes.OP_BGEU{
@@ -257,6 +297,10 @@ func DecodeBGEU(inst uint32) OP_BGEU {
 
 type OP_LB struct {
 	opcodes.OP_LB
+}
+
+func (o OP_LB) Describe() string {
+	return "LB"
 }
 
 func LB(RD uint32, RS1 uint32, IMM12 int32, debug DebugInfo) OP_LB {
@@ -284,6 +328,10 @@ type OP_LH struct {
 	opcodes.OP_LH
 }
 
+func (o OP_LH) Describe() string {
+	return "LH"
+}
+
 func LH(RD uint32, RS1 uint32, IMM12 int32, debug DebugInfo) OP_LH {
 	return OP_LH{
 		opcodes.OP_LH{
@@ -307,6 +355,10 @@ func DecodeLH(inst uint32) OP_LH {
 
 type OP_LW struct {
 	opcodes.OP_LW
+}
+
+func (o OP_LW) Describe() string {
+	return "LW"
 }
 
 func LW(RD uint32, RS1 uint32, IMM12 int32, debug DebugInfo) OP_LW {
@@ -334,6 +386,10 @@ type OP_LBU struct {
 	opcodes.OP_LBU
 }
 
+func (o OP_LBU) Describe() string {
+	return "LBU"
+}
+
 func LBU(RD uint32, RS1 uint32, IMM12 int32, debug DebugInfo) OP_LBU {
 	return OP_LBU{
 		opcodes.OP_LBU{
@@ -359,6 +415,10 @@ type OP_LHU struct {
 	opcodes.OP_LHU
 }
 
+func (o OP_LHU) Describe() string {
+	return "LHU"
+}
+
 func LHU(RD uint32, RS1 uint32, IMM12 int32, debug DebugInfo) OP_LHU {
 	return OP_LHU{
 		opcodes.OP_LHU{
@@ -382,6 +442,10 @@ func DecodeLHU(inst uint32) OP_LHU {
 
 type OP_SB struct {
 	opcodes.OP_SB
+}
+
+func (o OP_SB) Describe() string {
+	return "SB"
 }
 
 func SB(IMM12 int32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_SB {
@@ -410,6 +474,10 @@ type OP_SH struct {
 	opcodes.OP_SH
 }
 
+func (o OP_SH) Describe() string {
+	return "SH"
+}
+
 func SH(IMM12 int32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_SH {
 	return OP_SH{
 		opcodes.OP_SH{
@@ -434,6 +502,10 @@ func DecodeSH(inst uint32) OP_SH {
 
 type OP_SW struct {
 	opcodes.OP_SW
+}
+
+func (o OP_SW) Describe() string {
+	return "SW"
 }
 
 func SW(IMM12 int32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_SW {
@@ -462,6 +534,10 @@ type OP_ADDI struct {
 	opcodes.OP_ADDI
 }
 
+func (o OP_ADDI) Describe() string {
+	return "ADDI"
+}
+
 func ADDI(RD uint32, RS1 uint32, IMM12 int32, debug DebugInfo) OP_ADDI {
 	return OP_ADDI{
 		opcodes.OP_ADDI{
@@ -485,6 +561,10 @@ func DecodeADDI(inst uint32) OP_ADDI {
 
 type OP_SLTI struct {
 	opcodes.OP_SLTI
+}
+
+func (o OP_SLTI) Describe() string {
+	return "SLTI"
 }
 
 func SLTI(RD uint32, RS1 uint32, IMM12 int32, debug DebugInfo) OP_SLTI {
@@ -512,6 +592,10 @@ type OP_SLTIU struct {
 	opcodes.OP_SLTIU
 }
 
+func (o OP_SLTIU) Describe() string {
+	return "SLTIU"
+}
+
 func SLTIU(RD uint32, RS1 uint32, IMM12 int32, debug DebugInfo) OP_SLTIU {
 	return OP_SLTIU{
 		opcodes.OP_SLTIU{
@@ -535,6 +619,10 @@ func DecodeSLTIU(inst uint32) OP_SLTIU {
 
 type OP_XORI struct {
 	opcodes.OP_XORI
+}
+
+func (o OP_XORI) Describe() string {
+	return "XORI"
 }
 
 func XORI(RD uint32, RS1 uint32, IMM12 int32, debug DebugInfo) OP_XORI {
@@ -562,6 +650,10 @@ type OP_ORI struct {
 	opcodes.OP_ORI
 }
 
+func (o OP_ORI) Describe() string {
+	return "ORI"
+}
+
 func ORI(RD uint32, RS1 uint32, IMM12 int32, debug DebugInfo) OP_ORI {
 	return OP_ORI{
 		opcodes.OP_ORI{
@@ -585,6 +677,10 @@ func DecodeORI(inst uint32) OP_ORI {
 
 type OP_ANDI struct {
 	opcodes.OP_ANDI
+}
+
+func (o OP_ANDI) Describe() string {
+	return "ANDI"
 }
 
 func ANDI(RD uint32, RS1 uint32, IMM12 int32, debug DebugInfo) OP_ANDI {
@@ -612,6 +708,10 @@ type OP_ADD struct {
 	opcodes.OP_ADD
 }
 
+func (o OP_ADD) Describe() string {
+	return "ADD"
+}
+
 func ADD(RD uint32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_ADD {
 	return OP_ADD{
 		opcodes.OP_ADD{
@@ -635,6 +735,10 @@ func DecodeADD(inst uint32) OP_ADD {
 
 type OP_SUB struct {
 	opcodes.OP_SUB
+}
+
+func (o OP_SUB) Describe() string {
+	return "SUB"
 }
 
 func SUB(RD uint32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_SUB {
@@ -662,6 +766,10 @@ type OP_SLL struct {
 	opcodes.OP_SLL
 }
 
+func (o OP_SLL) Describe() string {
+	return "SLL"
+}
+
 func SLL(RD uint32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_SLL {
 	return OP_SLL{
 		opcodes.OP_SLL{
@@ -685,6 +793,10 @@ func DecodeSLL(inst uint32) OP_SLL {
 
 type OP_SLT struct {
 	opcodes.OP_SLT
+}
+
+func (o OP_SLT) Describe() string {
+	return "SLT"
 }
 
 func SLT(RD uint32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_SLT {
@@ -712,6 +824,10 @@ type OP_SLTU struct {
 	opcodes.OP_SLTU
 }
 
+func (o OP_SLTU) Describe() string {
+	return "SLTU"
+}
+
 func SLTU(RD uint32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_SLTU {
 	return OP_SLTU{
 		opcodes.OP_SLTU{
@@ -735,6 +851,10 @@ func DecodeSLTU(inst uint32) OP_SLTU {
 
 type OP_XOR struct {
 	opcodes.OP_XOR
+}
+
+func (o OP_XOR) Describe() string {
+	return "XOR"
 }
 
 func XOR(RD uint32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_XOR {
@@ -762,6 +882,10 @@ type OP_SRL struct {
 	opcodes.OP_SRL
 }
 
+func (o OP_SRL) Describe() string {
+	return "SRL"
+}
+
 func SRL(RD uint32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_SRL {
 	return OP_SRL{
 		opcodes.OP_SRL{
@@ -785,6 +909,10 @@ func DecodeSRL(inst uint32) OP_SRL {
 
 type OP_SRA struct {
 	opcodes.OP_SRA
+}
+
+func (o OP_SRA) Describe() string {
+	return "SRA"
 }
 
 func SRA(RD uint32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_SRA {
@@ -812,6 +940,10 @@ type OP_OR struct {
 	opcodes.OP_OR
 }
 
+func (o OP_OR) Describe() string {
+	return "OR"
+}
+
 func OR(RD uint32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_OR {
 	return OP_OR{
 		opcodes.OP_OR{
@@ -837,6 +969,10 @@ type OP_AND struct {
 	opcodes.OP_AND
 }
 
+func (o OP_AND) Describe() string {
+	return "AND"
+}
+
 func AND(RD uint32, RS1 uint32, RS2 uint32, debug DebugInfo) OP_AND {
 	return OP_AND{
 		opcodes.OP_AND{
@@ -860,6 +996,10 @@ func DecodeAND(inst uint32) OP_AND {
 
 type OP_FENCE struct {
 	opcodes.OP_FENCE
+}
+
+func (o OP_FENCE) Describe() string {
+	return "FENCE"
 }
 
 func FENCE(FM uint32, PRED uint32, SUCC uint32, RS1 uint32, RD uint32, debug DebugInfo) OP_FENCE {
@@ -891,6 +1031,10 @@ type OP_ECALL struct {
 	opcodes.OP_ECALL
 }
 
+func (o OP_ECALL) Describe() string {
+	return "ECALL"
+}
+
 func ECALL(debug DebugInfo) OP_ECALL {
 	return OP_ECALL{
 		opcodes.OP_ECALL{},
@@ -909,6 +1053,10 @@ type OP_EBREAK struct {
 	opcodes.OP_EBREAK
 }
 
+func (o OP_EBREAK) Describe() string {
+	return "EBREAK"
+}
+
 func EBREAK(debug DebugInfo) OP_EBREAK {
 	return OP_EBREAK{
 		opcodes.OP_EBREAK{},
@@ -925,6 +1073,10 @@ func DecodeEBREAK(inst uint32) OP_EBREAK {
 
 type OP_SLLI struct {
 	opcodes.OP_SLLI
+}
+
+func (o OP_SLLI) Describe() string {
+	return "SLLI"
 }
 
 func SLLI(RD uint32, RS1 uint32, SHAMTW uint32, debug DebugInfo) OP_SLLI {
@@ -952,6 +1104,10 @@ type OP_SRLI struct {
 	opcodes.OP_SRLI
 }
 
+func (o OP_SRLI) Describe() string {
+	return "SRLI"
+}
+
 func SRLI(RD uint32, RS1 uint32, SHAMTW uint32, debug DebugInfo) OP_SRLI {
 	return OP_SRLI{
 		opcodes.OP_SRLI{
@@ -975,6 +1131,10 @@ func DecodeSRLI(inst uint32) OP_SRLI {
 
 type OP_SRAI struct {
 	opcodes.OP_SRAI
+}
+
+func (o OP_SRAI) Describe() string {
+	return "SRAI"
 }
 
 func SRAI(RD uint32, RS1 uint32, SHAMTW uint32, debug DebugInfo) OP_SRAI {

@@ -9,6 +9,10 @@ type OP_CSRRW struct {
 	opcodes.OP_CSRRW
 }
 
+func (o OP_CSRRW) Describe() string {
+	return "CSRRW"
+}
+
 func CSRRW(RD uint32, RS1 uint32, CSR uint32, debug DebugInfo) OP_CSRRW {
 	return OP_CSRRW{
 		opcodes.OP_CSRRW{
@@ -32,6 +36,10 @@ func DecodeCSRRW(inst uint32) OP_CSRRW {
 
 type OP_CSRRS struct {
 	opcodes.OP_CSRRS
+}
+
+func (o OP_CSRRS) Describe() string {
+	return "CSRRS"
 }
 
 func CSRRS(RD uint32, RS1 uint32, CSR uint32, debug DebugInfo) OP_CSRRS {
@@ -59,6 +67,10 @@ type OP_CSRRC struct {
 	opcodes.OP_CSRRC
 }
 
+func (o OP_CSRRC) Describe() string {
+	return "CSRRC"
+}
+
 func CSRRC(RD uint32, RS1 uint32, CSR uint32, debug DebugInfo) OP_CSRRC {
 	return OP_CSRRC{
 		opcodes.OP_CSRRC{
@@ -82,6 +94,10 @@ func DecodeCSRRC(inst uint32) OP_CSRRC {
 
 type OP_CSRRWI struct {
 	opcodes.OP_CSRRWI
+}
+
+func (o OP_CSRRWI) Describe() string {
+	return "CSRRWI"
 }
 
 func CSRRWI(RD uint32, CSR uint32, ZIMM uint32, debug DebugInfo) OP_CSRRWI {
@@ -109,6 +125,10 @@ type OP_CSRRSI struct {
 	opcodes.OP_CSRRSI
 }
 
+func (o OP_CSRRSI) Describe() string {
+	return "CSRRSI"
+}
+
 func CSRRSI(RD uint32, CSR uint32, ZIMM uint32, debug DebugInfo) OP_CSRRSI {
 	return OP_CSRRSI{
 		opcodes.OP_CSRRSI{
@@ -132,6 +152,10 @@ func DecodeCSRRSI(inst uint32) OP_CSRRSI {
 
 type OP_CSRRCI struct {
 	opcodes.OP_CSRRCI
+}
+
+func (o OP_CSRRCI) Describe() string {
+	return "CSRRCI"
 }
 
 func CSRRCI(RD uint32, CSR uint32, ZIMM uint32, debug DebugInfo) OP_CSRRCI {
