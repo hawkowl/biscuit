@@ -6,7 +6,6 @@ import (
 )
 
 func TestADDI(t *testing.T) {
-
 	testCases := []struct {
 		input    uint32
 		expected OP_ADDI
@@ -29,7 +28,6 @@ func TestADDI(t *testing.T) {
 }
 
 func TestBEQ(t *testing.T) {
-
 	testCases := []struct {
 		input    uint32
 		expected OP_BEQ
@@ -44,6 +42,28 @@ func TestBEQ(t *testing.T) {
 
 		t.Run(funcName, func(t *testing.T) {
 			out := DecodeBEQ(tC.input)
+			if out != tC.expected {
+				t.Errorf("got %v, expected %v", out, tC.expected)
+			}
+		})
+	}
+}
+
+func TestSW(t *testing.T) {
+	testCases := []struct {
+		input    uint32
+		expected OP_SW
+	}{
+		{
+			input:    0x01d72223,
+			expected: SW(4, 14, 29, nil),
+		},
+	}
+	for _, tC := range testCases {
+		funcName := fmt.Sprintf("%#v", tC.input)
+
+		t.Run(funcName, func(t *testing.T) {
+			out := DecodeSW(tC.input)
 			if out != tC.expected {
 				t.Errorf("got %v, expected %v", out, tC.expected)
 			}

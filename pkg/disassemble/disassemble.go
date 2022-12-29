@@ -9,8 +9,8 @@ func field(in, start, length uint32) uint32 {
 type DebugInfo interface {
 }
 
-func DEC_RD(inst uint32) uint32 {
-	return 0
+type Opcode interface {
+	Describe() string
 }
 
 func DEC_BIMM12(inst uint32) int32 {
@@ -46,33 +46,37 @@ func DEC_JIMM20(inst uint32) int32 {
 }
 
 func DEC_FM(inst uint32) uint32 {
-	return 0
+	return field(inst, 28, 4)
 }
 
 func DEC_PRED(inst uint32) uint32 {
-	return 0
+	return field(inst, 24, 4)
 }
 
 func DEC_SUCC(inst uint32) uint32 {
-	return 0
+	return field(inst, 20, 4)
 }
 
 func DEC_SHAMTW(inst uint32) uint32 {
-	return 0
+	return field(inst, 20, 5)
 }
 
 func DEC_CSR(inst uint32) uint32 {
-	return 0
+	return field(inst, 20, 12)
 }
 
 func DEC_ZIMM(inst uint32) uint32 {
-	return 0
+	return field(inst, 15, 5)
+}
+
+func DEC_RD(inst uint32) uint32 {
+	return field(inst, 7, 5)
 }
 
 func DEC_RS1(inst uint32) uint32 {
-	return field(inst, 15, 4)
+	return field(inst, 15, 5)
 }
 
 func DEC_RS2(inst uint32) uint32 {
-	return field(inst, 20, 4)
+	return field(inst, 20, 5)
 }
