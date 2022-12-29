@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"go/format"
 	"log"
+	"math/bits"
 	"os"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 	"text/template"
 
@@ -18,10 +20,11 @@ import (
 const DEFAULT_EXTENSIONS = "i,zicsr"
 
 type Opcode struct {
-	Name      string
-	Args      [][2]string
-	Fields    [][2]string
-	Bitfields [][3]string
+	Name   string
+	Mask   uint32
+	Match  uint32
+	Args   [][2]string
+	Fields [][2]string
 }
 
 type Data struct {
@@ -60,7 +63,9 @@ func fileProcess(data *Data, filename string) error {
 			}
 		}
 
-		op := Opcode{}
+		op := Opcode{
+			Mask: uint32(2 ^ 32),
+		}
 		fields := make(map[string]int)
 		fieldNames := make([][2]string, 0)
 
@@ -99,12 +104,23 @@ func fileProcess(data *Data, filename string) error {
 					log.Printf("!! couldn't find field for %s\n", f)
 				}
 			} else {
-				op.Bitfields = append(op.Bitfields, [3]string{
-					subs[1], subs[2], subs[3],
-				})
+				msb, err := strconv.Atoi(subs[1])
+				if err != nil {
+					return err
+				}
+				lsb, err := strconv.Atoi(subs[2])
+				if err != nil {
+					return err
+				}
+				value, err := strconv.ParseUint(subs[3], 0, msb-lsb+1)
+				if err != nil {
+					return err
+				}
+
+				op.Match = op.Match | bits.RotateLeft32(uint32(value), lsb)
+				op.Mask = op.Mask | bits.RotateLeft32(uint32(1<<(msb-lsb+1)-1), lsb)
 			}
 		}
-
 		op.Args = fieldNames
 		data.Opcodes = append(data.Opcodes, op)
 
@@ -137,10 +153,16 @@ func process(opcodesPath string, extensions []string) error {
 	tmplEncode := template.Must(template.ParseFiles("hack/assemble/opcode_encode.tmpl"))
 	tmplDecode := template.Must(template.ParseFiles("hack/assemble/opcode_decode.tmpl"))
 	tmplDefs := template.Must(template.ParseFiles("hack/assemble/opcode_defs.tmpl"))
+	tmplConvert := template.Must(template.ParseFiles("hack/assemble/opcode_convert.tmpl"))
+	tmplMatch := template.Must(template.ParseFiles("hack/assemble/opcode_match.tmpl"))
 
 	p, err := filepath.Abs(opcodesPath)
 	if err != nil {
 		return err
+	}
+
+	all := &Data{
+		Opcodes: []Opcode{},
 	}
 
 	for _, ext := range extensions {
@@ -176,6 +198,17 @@ func process(opcodesPath string, extensions []string) error {
 			return err
 		}
 
+		all.Opcodes = append(all.Opcodes, o.Opcodes...)
+	}
+
+	err = writeFile(tmplConvert, all, "pkg/convert/opcodes.go")
+	if err != nil {
+		return err
+	}
+
+	err = writeFile(tmplMatch, all, "pkg/disassemble/match.go")
+	if err != nil {
+		return err
 	}
 
 	return nil

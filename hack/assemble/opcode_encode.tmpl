@@ -24,25 +24,18 @@ func {{ .Name }}({{ range .Args -}}
 
 
 
-func (o OP_{{.Name}}) Encode() (r uint32, err error) {
+func (o OP_{{.Name}}) Encode() (uint32, error) {
 {{ range .Fields -}}
     {{ index . 0 }}, err := GEN_{{ index . 0 }}(o.{{ index . 1 }})
 	if err != nil {
-		return
+		return 0, err
 	}
 {{ end }}
 
-	r = r 
+	return {{ printf "0x%08X" .Match }} 
 	{{- range .Fields -}}
 	| {{ index . 0 }}
-{{- end -}}
-	{{- range .Bitfields -}}
-		| ({{ index . 2 }}
-		{{- if index . 1 | ne "0" -}}
-			<< {{ index . 1 }}
-		{{- end -}})
-	{{- end }}
-	return
+{{- end -}}, nil
 }
 
 {{ end -}}

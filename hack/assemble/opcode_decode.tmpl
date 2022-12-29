@@ -10,6 +10,10 @@ type OP_{{ .Name }} struct {
 	opcodes.OP_{{ .Name }}
 }
 
+func (o OP_{{ .Name }}) Describe() string {
+    return "{{ .Name }}"
+}
+
 func {{ .Name }}({{ range .Args -}}
 		{{ index . 0 }} {{ index . 1 }},
 	{{- end -}} debug DebugInfo) OP_{{ .Name }} {

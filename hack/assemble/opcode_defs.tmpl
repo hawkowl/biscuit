@@ -3,6 +3,13 @@
 
 package opcodes
 
+const (
+    {{ range .Opcodes -}}
+        MASK_{{.Name}} uint32 = {{ printf "0x%08X" .Mask }} 
+        MATCH_{{.Name}} uint32 = {{ printf "0x%08X" .Match }} 
+    {{ end -}}
+)
+
 {{ range .Opcodes -}}
 type OP_{{ .Name }} struct {
 	{{ range .Args -}}
