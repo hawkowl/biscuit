@@ -17,4 +17,12 @@ type OP_{{ .Name }} struct {
 	{{ end -}}
 }
 
+func (o OP_{{.Name}}) Components() Components {
+    return Components{
+    {{ range .Args -}}
+		{{ index . 0 }}: o.{{ index . 0 }},
+	{{ end -}}
+    }
+}
+
 {{ end -}}

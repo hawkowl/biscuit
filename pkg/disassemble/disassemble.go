@@ -1,6 +1,9 @@
 package disassemble
 
-import "github.com/hawkowl/biscuit/pkg/common"
+import (
+	"github.com/hawkowl/biscuit/pkg/common"
+	"github.com/hawkowl/biscuit/pkg/opcodes"
+)
 
 func field(in, start, length uint32) uint32 {
 	return (in >> start) << (32 - length) >> (32 - length)
@@ -11,6 +14,7 @@ type DebugInfo interface {
 
 type Opcode interface {
 	Describe() string
+	Opcode() opcodes.Opcode
 }
 
 func DEC_BIMM12(inst uint32) int32 {

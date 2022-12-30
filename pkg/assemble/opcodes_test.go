@@ -4,31 +4,33 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/hawkowl/biscuit/pkg/opcodes"
 )
 
 func TestOpcodes(t *testing.T) {
 	testCases := []struct {
-		input    Opcode
+		input    opcodes.Opcode
 		expected uint32
 	}{
 		{
-			input:    BEQ(-20, 15, 14),
+			input:    opcodes.OP_BEQ{RS1: 15, RS2: 14, BIMM12: -20},
 			expected: 0xfee786e3,
 		},
 		{
-			input:    ADDI(7, 7, 1656),
+			input:    opcodes.OP_ADDI{RD: 7, RS1: 7, IMM12: 1656},
 			expected: 0x67838393,
 		},
 		{
-			input:    SLLI(14, 10, 2),
+			input:    opcodes.OP_SLLI{RD: 14, RS1: 10, SHAMTW: 2},
 			expected: 0x00251713,
 		},
 		{
-			input:    JAL(1, -96),
+			input:    opcodes.OP_JAL{RD: 1, JIMM20: -96},
 			expected: 0xfa1ff0ef,
 		},
 		{
-			input:    JAL(0, 9128),
+			input:    opcodes.OP_JAL{RD: 0, JIMM20: 9128},
 			expected: 0x3a80206f,
 		},
 	}
@@ -36,7 +38,7 @@ func TestOpcodes(t *testing.T) {
 		funcName := fmt.Sprintf("%#v", tC.input)
 
 		t.Run(funcName, func(t *testing.T) {
-			out, err := tC.input.Encode()
+			out, err := Encode(tC.input)
 			if err != nil {
 				t.Fatal(err)
 			}

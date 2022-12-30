@@ -6,25 +6,7 @@ package assemble
 import "github.com/hawkowl/biscuit/pkg/opcodes"
 
 {{ range .Opcodes -}}
-type OP_{{ .Name }} struct {
-	opcodes.OP_{{ .Name }}
-}
-
-func {{ .Name }}({{ range .Args -}}
-		{{ index . 0 }} {{ index . 1 }},
-	{{- end -}}) OP_{{ .Name }} {
-	return OP_{{ .Name }}{
-		opcodes.OP_{{ .Name }}{
-		{{ range .Args -}}
-			{{ index . 0 }}: {{ index . 0 }},
-		{{ end -}}
-		},
-	}
-}
-
-
-
-func (o OP_{{.Name}}) Encode() (uint32, error) {
+func Encode{{ .Name }}(o opcodes.OP_{{ .Name }}) (uint32, error) {
 {{ range .Fields -}}
     {{ index . 0 }}, err := GEN_{{ index . 0 }}(o.{{ index . 1 }})
 	if err != nil {

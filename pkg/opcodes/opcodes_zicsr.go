@@ -24,10 +24,26 @@ type OP_CSRRW struct {
 	CSR uint32
 }
 
+func (o OP_CSRRW) Components() Components {
+	return Components{
+		RD:  o.RD,
+		RS1: o.RS1,
+		CSR: o.CSR,
+	}
+}
+
 type OP_CSRRS struct {
 	RD  uint32
 	RS1 uint32
 	CSR uint32
+}
+
+func (o OP_CSRRS) Components() Components {
+	return Components{
+		RD:  o.RD,
+		RS1: o.RS1,
+		CSR: o.CSR,
+	}
 }
 
 type OP_CSRRC struct {
@@ -36,10 +52,26 @@ type OP_CSRRC struct {
 	CSR uint32
 }
 
+func (o OP_CSRRC) Components() Components {
+	return Components{
+		RD:  o.RD,
+		RS1: o.RS1,
+		CSR: o.CSR,
+	}
+}
+
 type OP_CSRRWI struct {
 	RD   uint32
 	CSR  uint32
 	ZIMM uint32
+}
+
+func (o OP_CSRRWI) Components() Components {
+	return Components{
+		RD:   o.RD,
+		CSR:  o.CSR,
+		ZIMM: o.ZIMM,
+	}
 }
 
 type OP_CSRRSI struct {
@@ -48,8 +80,24 @@ type OP_CSRRSI struct {
 	ZIMM uint32
 }
 
+func (o OP_CSRRSI) Components() Components {
+	return Components{
+		RD:   o.RD,
+		CSR:  o.CSR,
+		ZIMM: o.ZIMM,
+	}
+}
+
 type OP_CSRRCI struct {
 	RD   uint32
 	CSR  uint32
 	ZIMM uint32
+}
+
+func (o OP_CSRRCI) Components() Components {
+	return Components{
+		RD:   o.RD,
+		CSR:  o.CSR,
+		ZIMM: o.ZIMM,
+	}
 }

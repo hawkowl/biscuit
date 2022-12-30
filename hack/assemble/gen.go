@@ -153,7 +153,7 @@ func process(opcodesPath string, extensions []string) error {
 	tmplEncode := template.Must(template.ParseFiles("hack/assemble/opcode_encode.tmpl"))
 	tmplDecode := template.Must(template.ParseFiles("hack/assemble/opcode_decode.tmpl"))
 	tmplDefs := template.Must(template.ParseFiles("hack/assemble/opcode_defs.tmpl"))
-	tmplConvert := template.Must(template.ParseFiles("hack/assemble/opcode_convert.tmpl"))
+	tmplAssemble := template.Must(template.ParseFiles("hack/assemble/opcode_assemble.tmpl"))
 	tmplMatch := template.Must(template.ParseFiles("hack/assemble/opcode_match.tmpl"))
 
 	p, err := filepath.Abs(opcodesPath)
@@ -201,7 +201,7 @@ func process(opcodesPath string, extensions []string) error {
 		all.Opcodes = append(all.Opcodes, o.Opcodes...)
 	}
 
-	err = writeFile(tmplConvert, all, "pkg/convert/opcodes.go")
+	err = writeFile(tmplAssemble, all, "pkg/assemble/opcodes.go")
 	if err != nil {
 		return err
 	}

@@ -91,14 +91,35 @@ type OP_LUI struct {
 	IMM20 uint32
 }
 
+func (o OP_LUI) Components() Components {
+	return Components{
+		RD:    o.RD,
+		IMM20: o.IMM20,
+	}
+}
+
 type OP_AUIPC struct {
 	RD    uint32
 	IMM20 uint32
 }
 
+func (o OP_AUIPC) Components() Components {
+	return Components{
+		RD:    o.RD,
+		IMM20: o.IMM20,
+	}
+}
+
 type OP_JAL struct {
 	RD     uint32
 	JIMM20 int32
+}
+
+func (o OP_JAL) Components() Components {
+	return Components{
+		RD:     o.RD,
+		JIMM20: o.JIMM20,
+	}
 }
 
 type OP_JALR struct {
@@ -107,10 +128,26 @@ type OP_JALR struct {
 	IMM12 int32
 }
 
+func (o OP_JALR) Components() Components {
+	return Components{
+		RD:    o.RD,
+		RS1:   o.RS1,
+		IMM12: o.IMM12,
+	}
+}
+
 type OP_BEQ struct {
 	BIMM12 int32
 	RS1    uint32
 	RS2    uint32
+}
+
+func (o OP_BEQ) Components() Components {
+	return Components{
+		BIMM12: o.BIMM12,
+		RS1:    o.RS1,
+		RS2:    o.RS2,
+	}
 }
 
 type OP_BNE struct {
@@ -119,10 +156,26 @@ type OP_BNE struct {
 	RS2    uint32
 }
 
+func (o OP_BNE) Components() Components {
+	return Components{
+		BIMM12: o.BIMM12,
+		RS1:    o.RS1,
+		RS2:    o.RS2,
+	}
+}
+
 type OP_BLT struct {
 	BIMM12 int32
 	RS1    uint32
 	RS2    uint32
+}
+
+func (o OP_BLT) Components() Components {
+	return Components{
+		BIMM12: o.BIMM12,
+		RS1:    o.RS1,
+		RS2:    o.RS2,
+	}
 }
 
 type OP_BGE struct {
@@ -131,10 +184,26 @@ type OP_BGE struct {
 	RS2    uint32
 }
 
+func (o OP_BGE) Components() Components {
+	return Components{
+		BIMM12: o.BIMM12,
+		RS1:    o.RS1,
+		RS2:    o.RS2,
+	}
+}
+
 type OP_BLTU struct {
 	BIMM12 int32
 	RS1    uint32
 	RS2    uint32
+}
+
+func (o OP_BLTU) Components() Components {
+	return Components{
+		BIMM12: o.BIMM12,
+		RS1:    o.RS1,
+		RS2:    o.RS2,
+	}
 }
 
 type OP_BGEU struct {
@@ -143,10 +212,26 @@ type OP_BGEU struct {
 	RS2    uint32
 }
 
+func (o OP_BGEU) Components() Components {
+	return Components{
+		BIMM12: o.BIMM12,
+		RS1:    o.RS1,
+		RS2:    o.RS2,
+	}
+}
+
 type OP_LB struct {
 	RD    uint32
 	RS1   uint32
 	IMM12 int32
+}
+
+func (o OP_LB) Components() Components {
+	return Components{
+		RD:    o.RD,
+		RS1:   o.RS1,
+		IMM12: o.IMM12,
+	}
 }
 
 type OP_LH struct {
@@ -155,10 +240,26 @@ type OP_LH struct {
 	IMM12 int32
 }
 
+func (o OP_LH) Components() Components {
+	return Components{
+		RD:    o.RD,
+		RS1:   o.RS1,
+		IMM12: o.IMM12,
+	}
+}
+
 type OP_LW struct {
 	RD    uint32
 	RS1   uint32
 	IMM12 int32
+}
+
+func (o OP_LW) Components() Components {
+	return Components{
+		RD:    o.RD,
+		RS1:   o.RS1,
+		IMM12: o.IMM12,
+	}
 }
 
 type OP_LBU struct {
@@ -167,10 +268,26 @@ type OP_LBU struct {
 	IMM12 int32
 }
 
+func (o OP_LBU) Components() Components {
+	return Components{
+		RD:    o.RD,
+		RS1:   o.RS1,
+		IMM12: o.IMM12,
+	}
+}
+
 type OP_LHU struct {
 	RD    uint32
 	RS1   uint32
 	IMM12 int32
+}
+
+func (o OP_LHU) Components() Components {
+	return Components{
+		RD:    o.RD,
+		RS1:   o.RS1,
+		IMM12: o.IMM12,
+	}
 }
 
 type OP_SB struct {
@@ -179,10 +296,26 @@ type OP_SB struct {
 	RS2   uint32
 }
 
+func (o OP_SB) Components() Components {
+	return Components{
+		IMM12: o.IMM12,
+		RS1:   o.RS1,
+		RS2:   o.RS2,
+	}
+}
+
 type OP_SH struct {
 	IMM12 int32
 	RS1   uint32
 	RS2   uint32
+}
+
+func (o OP_SH) Components() Components {
+	return Components{
+		IMM12: o.IMM12,
+		RS1:   o.RS1,
+		RS2:   o.RS2,
+	}
 }
 
 type OP_SW struct {
@@ -191,10 +324,26 @@ type OP_SW struct {
 	RS2   uint32
 }
 
+func (o OP_SW) Components() Components {
+	return Components{
+		IMM12: o.IMM12,
+		RS1:   o.RS1,
+		RS2:   o.RS2,
+	}
+}
+
 type OP_ADDI struct {
 	RD    uint32
 	RS1   uint32
 	IMM12 int32
+}
+
+func (o OP_ADDI) Components() Components {
+	return Components{
+		RD:    o.RD,
+		RS1:   o.RS1,
+		IMM12: o.IMM12,
+	}
 }
 
 type OP_SLTI struct {
@@ -203,10 +352,26 @@ type OP_SLTI struct {
 	IMM12 int32
 }
 
+func (o OP_SLTI) Components() Components {
+	return Components{
+		RD:    o.RD,
+		RS1:   o.RS1,
+		IMM12: o.IMM12,
+	}
+}
+
 type OP_SLTIU struct {
 	RD    uint32
 	RS1   uint32
 	IMM12 int32
+}
+
+func (o OP_SLTIU) Components() Components {
+	return Components{
+		RD:    o.RD,
+		RS1:   o.RS1,
+		IMM12: o.IMM12,
+	}
 }
 
 type OP_XORI struct {
@@ -215,10 +380,26 @@ type OP_XORI struct {
 	IMM12 int32
 }
 
+func (o OP_XORI) Components() Components {
+	return Components{
+		RD:    o.RD,
+		RS1:   o.RS1,
+		IMM12: o.IMM12,
+	}
+}
+
 type OP_ORI struct {
 	RD    uint32
 	RS1   uint32
 	IMM12 int32
+}
+
+func (o OP_ORI) Components() Components {
+	return Components{
+		RD:    o.RD,
+		RS1:   o.RS1,
+		IMM12: o.IMM12,
+	}
 }
 
 type OP_ANDI struct {
@@ -227,10 +408,26 @@ type OP_ANDI struct {
 	IMM12 int32
 }
 
+func (o OP_ANDI) Components() Components {
+	return Components{
+		RD:    o.RD,
+		RS1:   o.RS1,
+		IMM12: o.IMM12,
+	}
+}
+
 type OP_ADD struct {
 	RD  uint32
 	RS1 uint32
 	RS2 uint32
+}
+
+func (o OP_ADD) Components() Components {
+	return Components{
+		RD:  o.RD,
+		RS1: o.RS1,
+		RS2: o.RS2,
+	}
 }
 
 type OP_SUB struct {
@@ -239,10 +436,26 @@ type OP_SUB struct {
 	RS2 uint32
 }
 
+func (o OP_SUB) Components() Components {
+	return Components{
+		RD:  o.RD,
+		RS1: o.RS1,
+		RS2: o.RS2,
+	}
+}
+
 type OP_SLL struct {
 	RD  uint32
 	RS1 uint32
 	RS2 uint32
+}
+
+func (o OP_SLL) Components() Components {
+	return Components{
+		RD:  o.RD,
+		RS1: o.RS1,
+		RS2: o.RS2,
+	}
 }
 
 type OP_SLT struct {
@@ -251,10 +464,26 @@ type OP_SLT struct {
 	RS2 uint32
 }
 
+func (o OP_SLT) Components() Components {
+	return Components{
+		RD:  o.RD,
+		RS1: o.RS1,
+		RS2: o.RS2,
+	}
+}
+
 type OP_SLTU struct {
 	RD  uint32
 	RS1 uint32
 	RS2 uint32
+}
+
+func (o OP_SLTU) Components() Components {
+	return Components{
+		RD:  o.RD,
+		RS1: o.RS1,
+		RS2: o.RS2,
+	}
 }
 
 type OP_XOR struct {
@@ -263,10 +492,26 @@ type OP_XOR struct {
 	RS2 uint32
 }
 
+func (o OP_XOR) Components() Components {
+	return Components{
+		RD:  o.RD,
+		RS1: o.RS1,
+		RS2: o.RS2,
+	}
+}
+
 type OP_SRL struct {
 	RD  uint32
 	RS1 uint32
 	RS2 uint32
+}
+
+func (o OP_SRL) Components() Components {
+	return Components{
+		RD:  o.RD,
+		RS1: o.RS1,
+		RS2: o.RS2,
+	}
 }
 
 type OP_SRA struct {
@@ -275,16 +520,40 @@ type OP_SRA struct {
 	RS2 uint32
 }
 
+func (o OP_SRA) Components() Components {
+	return Components{
+		RD:  o.RD,
+		RS1: o.RS1,
+		RS2: o.RS2,
+	}
+}
+
 type OP_OR struct {
 	RD  uint32
 	RS1 uint32
 	RS2 uint32
 }
 
+func (o OP_OR) Components() Components {
+	return Components{
+		RD:  o.RD,
+		RS1: o.RS1,
+		RS2: o.RS2,
+	}
+}
+
 type OP_AND struct {
 	RD  uint32
 	RS1 uint32
 	RS2 uint32
+}
+
+func (o OP_AND) Components() Components {
+	return Components{
+		RD:  o.RD,
+		RS1: o.RS1,
+		RS2: o.RS2,
+	}
 }
 
 type OP_FENCE struct {
@@ -295,10 +564,28 @@ type OP_FENCE struct {
 	RD   uint32
 }
 
+func (o OP_FENCE) Components() Components {
+	return Components{
+		FM:   o.FM,
+		PRED: o.PRED,
+		SUCC: o.SUCC,
+		RS1:  o.RS1,
+		RD:   o.RD,
+	}
+}
+
 type OP_ECALL struct {
 }
 
+func (o OP_ECALL) Components() Components {
+	return Components{}
+}
+
 type OP_EBREAK struct {
+}
+
+func (o OP_EBREAK) Components() Components {
+	return Components{}
 }
 
 type OP_SLLI struct {
@@ -307,14 +594,38 @@ type OP_SLLI struct {
 	SHAMTW uint32
 }
 
+func (o OP_SLLI) Components() Components {
+	return Components{
+		RD:     o.RD,
+		RS1:    o.RS1,
+		SHAMTW: o.SHAMTW,
+	}
+}
+
 type OP_SRLI struct {
 	RD     uint32
 	RS1    uint32
 	SHAMTW uint32
 }
 
+func (o OP_SRLI) Components() Components {
+	return Components{
+		RD:     o.RD,
+		RS1:    o.RS1,
+		SHAMTW: o.SHAMTW,
+	}
+}
+
 type OP_SRAI struct {
 	RD     uint32
 	RS1    uint32
 	SHAMTW uint32
+}
+
+func (o OP_SRAI) Components() Components {
+	return Components{
+		RD:     o.RD,
+		RS1:    o.RS1,
+		SHAMTW: o.SHAMTW,
+	}
 }

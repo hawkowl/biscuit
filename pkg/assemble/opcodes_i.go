@@ -5,20 +5,7 @@ package assemble
 
 import "github.com/hawkowl/biscuit/pkg/opcodes"
 
-type OP_LUI struct {
-	opcodes.OP_LUI
-}
-
-func LUI(RD uint32, IMM20 uint32) OP_LUI {
-	return OP_LUI{
-		opcodes.OP_LUI{
-			RD:    RD,
-			IMM20: IMM20,
-		},
-	}
-}
-
-func (o OP_LUI) Encode() (uint32, error) {
+func EncodeLUI(o opcodes.OP_LUI) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -31,20 +18,7 @@ func (o OP_LUI) Encode() (uint32, error) {
 	return 0x00000037 | RD | IMM20, nil
 }
 
-type OP_AUIPC struct {
-	opcodes.OP_AUIPC
-}
-
-func AUIPC(RD uint32, IMM20 uint32) OP_AUIPC {
-	return OP_AUIPC{
-		opcodes.OP_AUIPC{
-			RD:    RD,
-			IMM20: IMM20,
-		},
-	}
-}
-
-func (o OP_AUIPC) Encode() (uint32, error) {
+func EncodeAUIPC(o opcodes.OP_AUIPC) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -57,20 +31,7 @@ func (o OP_AUIPC) Encode() (uint32, error) {
 	return 0x00000017 | RD | IMM20, nil
 }
 
-type OP_JAL struct {
-	opcodes.OP_JAL
-}
-
-func JAL(RD uint32, JIMM20 int32) OP_JAL {
-	return OP_JAL{
-		opcodes.OP_JAL{
-			RD:     RD,
-			JIMM20: JIMM20,
-		},
-	}
-}
-
-func (o OP_JAL) Encode() (uint32, error) {
+func EncodeJAL(o opcodes.OP_JAL) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -83,21 +44,7 @@ func (o OP_JAL) Encode() (uint32, error) {
 	return 0x0000006F | RD | JIMM20, nil
 }
 
-type OP_JALR struct {
-	opcodes.OP_JALR
-}
-
-func JALR(RD uint32, RS1 uint32, IMM12 int32) OP_JALR {
-	return OP_JALR{
-		opcodes.OP_JALR{
-			RD:    RD,
-			RS1:   RS1,
-			IMM12: IMM12,
-		},
-	}
-}
-
-func (o OP_JALR) Encode() (uint32, error) {
+func EncodeJALR(o opcodes.OP_JALR) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -114,21 +61,7 @@ func (o OP_JALR) Encode() (uint32, error) {
 	return 0x00000067 | RD | RS1 | IMM12, nil
 }
 
-type OP_BEQ struct {
-	opcodes.OP_BEQ
-}
-
-func BEQ(BIMM12 int32, RS1 uint32, RS2 uint32) OP_BEQ {
-	return OP_BEQ{
-		opcodes.OP_BEQ{
-			BIMM12: BIMM12,
-			RS1:    RS1,
-			RS2:    RS2,
-		},
-	}
-}
-
-func (o OP_BEQ) Encode() (uint32, error) {
+func EncodeBEQ(o opcodes.OP_BEQ) (uint32, error) {
 	BIMM12HI, err := GEN_BIMM12HI(o.BIMM12)
 	if err != nil {
 		return 0, err
@@ -149,21 +82,7 @@ func (o OP_BEQ) Encode() (uint32, error) {
 	return 0x00000063 | BIMM12HI | RS1 | RS2 | BIMM12LO, nil
 }
 
-type OP_BNE struct {
-	opcodes.OP_BNE
-}
-
-func BNE(BIMM12 int32, RS1 uint32, RS2 uint32) OP_BNE {
-	return OP_BNE{
-		opcodes.OP_BNE{
-			BIMM12: BIMM12,
-			RS1:    RS1,
-			RS2:    RS2,
-		},
-	}
-}
-
-func (o OP_BNE) Encode() (uint32, error) {
+func EncodeBNE(o opcodes.OP_BNE) (uint32, error) {
 	BIMM12HI, err := GEN_BIMM12HI(o.BIMM12)
 	if err != nil {
 		return 0, err
@@ -184,21 +103,7 @@ func (o OP_BNE) Encode() (uint32, error) {
 	return 0x00001063 | BIMM12HI | RS1 | RS2 | BIMM12LO, nil
 }
 
-type OP_BLT struct {
-	opcodes.OP_BLT
-}
-
-func BLT(BIMM12 int32, RS1 uint32, RS2 uint32) OP_BLT {
-	return OP_BLT{
-		opcodes.OP_BLT{
-			BIMM12: BIMM12,
-			RS1:    RS1,
-			RS2:    RS2,
-		},
-	}
-}
-
-func (o OP_BLT) Encode() (uint32, error) {
+func EncodeBLT(o opcodes.OP_BLT) (uint32, error) {
 	BIMM12HI, err := GEN_BIMM12HI(o.BIMM12)
 	if err != nil {
 		return 0, err
@@ -219,21 +124,7 @@ func (o OP_BLT) Encode() (uint32, error) {
 	return 0x00004063 | BIMM12HI | RS1 | RS2 | BIMM12LO, nil
 }
 
-type OP_BGE struct {
-	opcodes.OP_BGE
-}
-
-func BGE(BIMM12 int32, RS1 uint32, RS2 uint32) OP_BGE {
-	return OP_BGE{
-		opcodes.OP_BGE{
-			BIMM12: BIMM12,
-			RS1:    RS1,
-			RS2:    RS2,
-		},
-	}
-}
-
-func (o OP_BGE) Encode() (uint32, error) {
+func EncodeBGE(o opcodes.OP_BGE) (uint32, error) {
 	BIMM12HI, err := GEN_BIMM12HI(o.BIMM12)
 	if err != nil {
 		return 0, err
@@ -254,21 +145,7 @@ func (o OP_BGE) Encode() (uint32, error) {
 	return 0x00005063 | BIMM12HI | RS1 | RS2 | BIMM12LO, nil
 }
 
-type OP_BLTU struct {
-	opcodes.OP_BLTU
-}
-
-func BLTU(BIMM12 int32, RS1 uint32, RS2 uint32) OP_BLTU {
-	return OP_BLTU{
-		opcodes.OP_BLTU{
-			BIMM12: BIMM12,
-			RS1:    RS1,
-			RS2:    RS2,
-		},
-	}
-}
-
-func (o OP_BLTU) Encode() (uint32, error) {
+func EncodeBLTU(o opcodes.OP_BLTU) (uint32, error) {
 	BIMM12HI, err := GEN_BIMM12HI(o.BIMM12)
 	if err != nil {
 		return 0, err
@@ -289,21 +166,7 @@ func (o OP_BLTU) Encode() (uint32, error) {
 	return 0x00006063 | BIMM12HI | RS1 | RS2 | BIMM12LO, nil
 }
 
-type OP_BGEU struct {
-	opcodes.OP_BGEU
-}
-
-func BGEU(BIMM12 int32, RS1 uint32, RS2 uint32) OP_BGEU {
-	return OP_BGEU{
-		opcodes.OP_BGEU{
-			BIMM12: BIMM12,
-			RS1:    RS1,
-			RS2:    RS2,
-		},
-	}
-}
-
-func (o OP_BGEU) Encode() (uint32, error) {
+func EncodeBGEU(o opcodes.OP_BGEU) (uint32, error) {
 	BIMM12HI, err := GEN_BIMM12HI(o.BIMM12)
 	if err != nil {
 		return 0, err
@@ -324,21 +187,7 @@ func (o OP_BGEU) Encode() (uint32, error) {
 	return 0x00007063 | BIMM12HI | RS1 | RS2 | BIMM12LO, nil
 }
 
-type OP_LB struct {
-	opcodes.OP_LB
-}
-
-func LB(RD uint32, RS1 uint32, IMM12 int32) OP_LB {
-	return OP_LB{
-		opcodes.OP_LB{
-			RD:    RD,
-			RS1:   RS1,
-			IMM12: IMM12,
-		},
-	}
-}
-
-func (o OP_LB) Encode() (uint32, error) {
+func EncodeLB(o opcodes.OP_LB) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -355,21 +204,7 @@ func (o OP_LB) Encode() (uint32, error) {
 	return 0x00000003 | RD | RS1 | IMM12, nil
 }
 
-type OP_LH struct {
-	opcodes.OP_LH
-}
-
-func LH(RD uint32, RS1 uint32, IMM12 int32) OP_LH {
-	return OP_LH{
-		opcodes.OP_LH{
-			RD:    RD,
-			RS1:   RS1,
-			IMM12: IMM12,
-		},
-	}
-}
-
-func (o OP_LH) Encode() (uint32, error) {
+func EncodeLH(o opcodes.OP_LH) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -386,21 +221,7 @@ func (o OP_LH) Encode() (uint32, error) {
 	return 0x00001003 | RD | RS1 | IMM12, nil
 }
 
-type OP_LW struct {
-	opcodes.OP_LW
-}
-
-func LW(RD uint32, RS1 uint32, IMM12 int32) OP_LW {
-	return OP_LW{
-		opcodes.OP_LW{
-			RD:    RD,
-			RS1:   RS1,
-			IMM12: IMM12,
-		},
-	}
-}
-
-func (o OP_LW) Encode() (uint32, error) {
+func EncodeLW(o opcodes.OP_LW) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -417,21 +238,7 @@ func (o OP_LW) Encode() (uint32, error) {
 	return 0x00002003 | RD | RS1 | IMM12, nil
 }
 
-type OP_LBU struct {
-	opcodes.OP_LBU
-}
-
-func LBU(RD uint32, RS1 uint32, IMM12 int32) OP_LBU {
-	return OP_LBU{
-		opcodes.OP_LBU{
-			RD:    RD,
-			RS1:   RS1,
-			IMM12: IMM12,
-		},
-	}
-}
-
-func (o OP_LBU) Encode() (uint32, error) {
+func EncodeLBU(o opcodes.OP_LBU) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -448,21 +255,7 @@ func (o OP_LBU) Encode() (uint32, error) {
 	return 0x00004003 | RD | RS1 | IMM12, nil
 }
 
-type OP_LHU struct {
-	opcodes.OP_LHU
-}
-
-func LHU(RD uint32, RS1 uint32, IMM12 int32) OP_LHU {
-	return OP_LHU{
-		opcodes.OP_LHU{
-			RD:    RD,
-			RS1:   RS1,
-			IMM12: IMM12,
-		},
-	}
-}
-
-func (o OP_LHU) Encode() (uint32, error) {
+func EncodeLHU(o opcodes.OP_LHU) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -479,21 +272,7 @@ func (o OP_LHU) Encode() (uint32, error) {
 	return 0x00005003 | RD | RS1 | IMM12, nil
 }
 
-type OP_SB struct {
-	opcodes.OP_SB
-}
-
-func SB(IMM12 int32, RS1 uint32, RS2 uint32) OP_SB {
-	return OP_SB{
-		opcodes.OP_SB{
-			IMM12: IMM12,
-			RS1:   RS1,
-			RS2:   RS2,
-		},
-	}
-}
-
-func (o OP_SB) Encode() (uint32, error) {
+func EncodeSB(o opcodes.OP_SB) (uint32, error) {
 	IMM12HI, err := GEN_IMM12HI(o.IMM12)
 	if err != nil {
 		return 0, err
@@ -514,21 +293,7 @@ func (o OP_SB) Encode() (uint32, error) {
 	return 0x00000023 | IMM12HI | RS1 | RS2 | IMM12LO, nil
 }
 
-type OP_SH struct {
-	opcodes.OP_SH
-}
-
-func SH(IMM12 int32, RS1 uint32, RS2 uint32) OP_SH {
-	return OP_SH{
-		opcodes.OP_SH{
-			IMM12: IMM12,
-			RS1:   RS1,
-			RS2:   RS2,
-		},
-	}
-}
-
-func (o OP_SH) Encode() (uint32, error) {
+func EncodeSH(o opcodes.OP_SH) (uint32, error) {
 	IMM12HI, err := GEN_IMM12HI(o.IMM12)
 	if err != nil {
 		return 0, err
@@ -549,21 +314,7 @@ func (o OP_SH) Encode() (uint32, error) {
 	return 0x00001023 | IMM12HI | RS1 | RS2 | IMM12LO, nil
 }
 
-type OP_SW struct {
-	opcodes.OP_SW
-}
-
-func SW(IMM12 int32, RS1 uint32, RS2 uint32) OP_SW {
-	return OP_SW{
-		opcodes.OP_SW{
-			IMM12: IMM12,
-			RS1:   RS1,
-			RS2:   RS2,
-		},
-	}
-}
-
-func (o OP_SW) Encode() (uint32, error) {
+func EncodeSW(o opcodes.OP_SW) (uint32, error) {
 	IMM12HI, err := GEN_IMM12HI(o.IMM12)
 	if err != nil {
 		return 0, err
@@ -584,21 +335,7 @@ func (o OP_SW) Encode() (uint32, error) {
 	return 0x00002023 | IMM12HI | RS1 | RS2 | IMM12LO, nil
 }
 
-type OP_ADDI struct {
-	opcodes.OP_ADDI
-}
-
-func ADDI(RD uint32, RS1 uint32, IMM12 int32) OP_ADDI {
-	return OP_ADDI{
-		opcodes.OP_ADDI{
-			RD:    RD,
-			RS1:   RS1,
-			IMM12: IMM12,
-		},
-	}
-}
-
-func (o OP_ADDI) Encode() (uint32, error) {
+func EncodeADDI(o opcodes.OP_ADDI) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -615,21 +352,7 @@ func (o OP_ADDI) Encode() (uint32, error) {
 	return 0x00000013 | RD | RS1 | IMM12, nil
 }
 
-type OP_SLTI struct {
-	opcodes.OP_SLTI
-}
-
-func SLTI(RD uint32, RS1 uint32, IMM12 int32) OP_SLTI {
-	return OP_SLTI{
-		opcodes.OP_SLTI{
-			RD:    RD,
-			RS1:   RS1,
-			IMM12: IMM12,
-		},
-	}
-}
-
-func (o OP_SLTI) Encode() (uint32, error) {
+func EncodeSLTI(o opcodes.OP_SLTI) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -646,21 +369,7 @@ func (o OP_SLTI) Encode() (uint32, error) {
 	return 0x00002013 | RD | RS1 | IMM12, nil
 }
 
-type OP_SLTIU struct {
-	opcodes.OP_SLTIU
-}
-
-func SLTIU(RD uint32, RS1 uint32, IMM12 int32) OP_SLTIU {
-	return OP_SLTIU{
-		opcodes.OP_SLTIU{
-			RD:    RD,
-			RS1:   RS1,
-			IMM12: IMM12,
-		},
-	}
-}
-
-func (o OP_SLTIU) Encode() (uint32, error) {
+func EncodeSLTIU(o opcodes.OP_SLTIU) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -677,21 +386,7 @@ func (o OP_SLTIU) Encode() (uint32, error) {
 	return 0x00003013 | RD | RS1 | IMM12, nil
 }
 
-type OP_XORI struct {
-	opcodes.OP_XORI
-}
-
-func XORI(RD uint32, RS1 uint32, IMM12 int32) OP_XORI {
-	return OP_XORI{
-		opcodes.OP_XORI{
-			RD:    RD,
-			RS1:   RS1,
-			IMM12: IMM12,
-		},
-	}
-}
-
-func (o OP_XORI) Encode() (uint32, error) {
+func EncodeXORI(o opcodes.OP_XORI) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -708,21 +403,7 @@ func (o OP_XORI) Encode() (uint32, error) {
 	return 0x00004013 | RD | RS1 | IMM12, nil
 }
 
-type OP_ORI struct {
-	opcodes.OP_ORI
-}
-
-func ORI(RD uint32, RS1 uint32, IMM12 int32) OP_ORI {
-	return OP_ORI{
-		opcodes.OP_ORI{
-			RD:    RD,
-			RS1:   RS1,
-			IMM12: IMM12,
-		},
-	}
-}
-
-func (o OP_ORI) Encode() (uint32, error) {
+func EncodeORI(o opcodes.OP_ORI) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -739,21 +420,7 @@ func (o OP_ORI) Encode() (uint32, error) {
 	return 0x00006013 | RD | RS1 | IMM12, nil
 }
 
-type OP_ANDI struct {
-	opcodes.OP_ANDI
-}
-
-func ANDI(RD uint32, RS1 uint32, IMM12 int32) OP_ANDI {
-	return OP_ANDI{
-		opcodes.OP_ANDI{
-			RD:    RD,
-			RS1:   RS1,
-			IMM12: IMM12,
-		},
-	}
-}
-
-func (o OP_ANDI) Encode() (uint32, error) {
+func EncodeANDI(o opcodes.OP_ANDI) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -770,21 +437,7 @@ func (o OP_ANDI) Encode() (uint32, error) {
 	return 0x00007013 | RD | RS1 | IMM12, nil
 }
 
-type OP_ADD struct {
-	opcodes.OP_ADD
-}
-
-func ADD(RD uint32, RS1 uint32, RS2 uint32) OP_ADD {
-	return OP_ADD{
-		opcodes.OP_ADD{
-			RD:  RD,
-			RS1: RS1,
-			RS2: RS2,
-		},
-	}
-}
-
-func (o OP_ADD) Encode() (uint32, error) {
+func EncodeADD(o opcodes.OP_ADD) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -801,21 +454,7 @@ func (o OP_ADD) Encode() (uint32, error) {
 	return 0x00000033 | RD | RS1 | RS2, nil
 }
 
-type OP_SUB struct {
-	opcodes.OP_SUB
-}
-
-func SUB(RD uint32, RS1 uint32, RS2 uint32) OP_SUB {
-	return OP_SUB{
-		opcodes.OP_SUB{
-			RD:  RD,
-			RS1: RS1,
-			RS2: RS2,
-		},
-	}
-}
-
-func (o OP_SUB) Encode() (uint32, error) {
+func EncodeSUB(o opcodes.OP_SUB) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -832,21 +471,7 @@ func (o OP_SUB) Encode() (uint32, error) {
 	return 0x40000033 | RD | RS1 | RS2, nil
 }
 
-type OP_SLL struct {
-	opcodes.OP_SLL
-}
-
-func SLL(RD uint32, RS1 uint32, RS2 uint32) OP_SLL {
-	return OP_SLL{
-		opcodes.OP_SLL{
-			RD:  RD,
-			RS1: RS1,
-			RS2: RS2,
-		},
-	}
-}
-
-func (o OP_SLL) Encode() (uint32, error) {
+func EncodeSLL(o opcodes.OP_SLL) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -863,21 +488,7 @@ func (o OP_SLL) Encode() (uint32, error) {
 	return 0x00001033 | RD | RS1 | RS2, nil
 }
 
-type OP_SLT struct {
-	opcodes.OP_SLT
-}
-
-func SLT(RD uint32, RS1 uint32, RS2 uint32) OP_SLT {
-	return OP_SLT{
-		opcodes.OP_SLT{
-			RD:  RD,
-			RS1: RS1,
-			RS2: RS2,
-		},
-	}
-}
-
-func (o OP_SLT) Encode() (uint32, error) {
+func EncodeSLT(o opcodes.OP_SLT) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -894,21 +505,7 @@ func (o OP_SLT) Encode() (uint32, error) {
 	return 0x00002033 | RD | RS1 | RS2, nil
 }
 
-type OP_SLTU struct {
-	opcodes.OP_SLTU
-}
-
-func SLTU(RD uint32, RS1 uint32, RS2 uint32) OP_SLTU {
-	return OP_SLTU{
-		opcodes.OP_SLTU{
-			RD:  RD,
-			RS1: RS1,
-			RS2: RS2,
-		},
-	}
-}
-
-func (o OP_SLTU) Encode() (uint32, error) {
+func EncodeSLTU(o opcodes.OP_SLTU) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -925,21 +522,7 @@ func (o OP_SLTU) Encode() (uint32, error) {
 	return 0x00003033 | RD | RS1 | RS2, nil
 }
 
-type OP_XOR struct {
-	opcodes.OP_XOR
-}
-
-func XOR(RD uint32, RS1 uint32, RS2 uint32) OP_XOR {
-	return OP_XOR{
-		opcodes.OP_XOR{
-			RD:  RD,
-			RS1: RS1,
-			RS2: RS2,
-		},
-	}
-}
-
-func (o OP_XOR) Encode() (uint32, error) {
+func EncodeXOR(o opcodes.OP_XOR) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -956,21 +539,7 @@ func (o OP_XOR) Encode() (uint32, error) {
 	return 0x00004033 | RD | RS1 | RS2, nil
 }
 
-type OP_SRL struct {
-	opcodes.OP_SRL
-}
-
-func SRL(RD uint32, RS1 uint32, RS2 uint32) OP_SRL {
-	return OP_SRL{
-		opcodes.OP_SRL{
-			RD:  RD,
-			RS1: RS1,
-			RS2: RS2,
-		},
-	}
-}
-
-func (o OP_SRL) Encode() (uint32, error) {
+func EncodeSRL(o opcodes.OP_SRL) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -987,21 +556,7 @@ func (o OP_SRL) Encode() (uint32, error) {
 	return 0x00005033 | RD | RS1 | RS2, nil
 }
 
-type OP_SRA struct {
-	opcodes.OP_SRA
-}
-
-func SRA(RD uint32, RS1 uint32, RS2 uint32) OP_SRA {
-	return OP_SRA{
-		opcodes.OP_SRA{
-			RD:  RD,
-			RS1: RS1,
-			RS2: RS2,
-		},
-	}
-}
-
-func (o OP_SRA) Encode() (uint32, error) {
+func EncodeSRA(o opcodes.OP_SRA) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -1018,21 +573,7 @@ func (o OP_SRA) Encode() (uint32, error) {
 	return 0x40005033 | RD | RS1 | RS2, nil
 }
 
-type OP_OR struct {
-	opcodes.OP_OR
-}
-
-func OR(RD uint32, RS1 uint32, RS2 uint32) OP_OR {
-	return OP_OR{
-		opcodes.OP_OR{
-			RD:  RD,
-			RS1: RS1,
-			RS2: RS2,
-		},
-	}
-}
-
-func (o OP_OR) Encode() (uint32, error) {
+func EncodeOR(o opcodes.OP_OR) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -1049,21 +590,7 @@ func (o OP_OR) Encode() (uint32, error) {
 	return 0x00006033 | RD | RS1 | RS2, nil
 }
 
-type OP_AND struct {
-	opcodes.OP_AND
-}
-
-func AND(RD uint32, RS1 uint32, RS2 uint32) OP_AND {
-	return OP_AND{
-		opcodes.OP_AND{
-			RD:  RD,
-			RS1: RS1,
-			RS2: RS2,
-		},
-	}
-}
-
-func (o OP_AND) Encode() (uint32, error) {
+func EncodeAND(o opcodes.OP_AND) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -1080,23 +607,7 @@ func (o OP_AND) Encode() (uint32, error) {
 	return 0x00007033 | RD | RS1 | RS2, nil
 }
 
-type OP_FENCE struct {
-	opcodes.OP_FENCE
-}
-
-func FENCE(FM uint32, PRED uint32, SUCC uint32, RS1 uint32, RD uint32) OP_FENCE {
-	return OP_FENCE{
-		opcodes.OP_FENCE{
-			FM:   FM,
-			PRED: PRED,
-			SUCC: SUCC,
-			RS1:  RS1,
-			RD:   RD,
-		},
-	}
-}
-
-func (o OP_FENCE) Encode() (uint32, error) {
+func EncodeFENCE(o opcodes.OP_FENCE) (uint32, error) {
 	FM, err := GEN_FM(o.FM)
 	if err != nil {
 		return 0, err
@@ -1121,51 +632,17 @@ func (o OP_FENCE) Encode() (uint32, error) {
 	return 0x0000000F | FM | PRED | SUCC | RS1 | RD, nil
 }
 
-type OP_ECALL struct {
-	opcodes.OP_ECALL
-}
-
-func ECALL() OP_ECALL {
-	return OP_ECALL{
-		opcodes.OP_ECALL{},
-	}
-}
-
-func (o OP_ECALL) Encode() (uint32, error) {
+func EncodeECALL(o opcodes.OP_ECALL) (uint32, error) {
 
 	return 0x00000073, nil
 }
 
-type OP_EBREAK struct {
-	opcodes.OP_EBREAK
-}
-
-func EBREAK() OP_EBREAK {
-	return OP_EBREAK{
-		opcodes.OP_EBREAK{},
-	}
-}
-
-func (o OP_EBREAK) Encode() (uint32, error) {
+func EncodeEBREAK(o opcodes.OP_EBREAK) (uint32, error) {
 
 	return 0x00100073, nil
 }
 
-type OP_SLLI struct {
-	opcodes.OP_SLLI
-}
-
-func SLLI(RD uint32, RS1 uint32, SHAMTW uint32) OP_SLLI {
-	return OP_SLLI{
-		opcodes.OP_SLLI{
-			RD:     RD,
-			RS1:    RS1,
-			SHAMTW: SHAMTW,
-		},
-	}
-}
-
-func (o OP_SLLI) Encode() (uint32, error) {
+func EncodeSLLI(o opcodes.OP_SLLI) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -1182,21 +659,7 @@ func (o OP_SLLI) Encode() (uint32, error) {
 	return 0x00001013 | RD | RS1 | SHAMTW, nil
 }
 
-type OP_SRLI struct {
-	opcodes.OP_SRLI
-}
-
-func SRLI(RD uint32, RS1 uint32, SHAMTW uint32) OP_SRLI {
-	return OP_SRLI{
-		opcodes.OP_SRLI{
-			RD:     RD,
-			RS1:    RS1,
-			SHAMTW: SHAMTW,
-		},
-	}
-}
-
-func (o OP_SRLI) Encode() (uint32, error) {
+func EncodeSRLI(o opcodes.OP_SRLI) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err
@@ -1213,21 +676,7 @@ func (o OP_SRLI) Encode() (uint32, error) {
 	return 0x00005013 | RD | RS1 | SHAMTW, nil
 }
 
-type OP_SRAI struct {
-	opcodes.OP_SRAI
-}
-
-func SRAI(RD uint32, RS1 uint32, SHAMTW uint32) OP_SRAI {
-	return OP_SRAI{
-		opcodes.OP_SRAI{
-			RD:     RD,
-			RS1:    RS1,
-			SHAMTW: SHAMTW,
-		},
-	}
-}
-
-func (o OP_SRAI) Encode() (uint32, error) {
+func EncodeSRAI(o opcodes.OP_SRAI) (uint32, error) {
 	RD, err := GEN_RD(o.RD)
 	if err != nil {
 		return 0, err

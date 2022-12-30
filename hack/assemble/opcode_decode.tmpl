@@ -14,6 +14,10 @@ func (o OP_{{ .Name }}) Describe() string {
     return "{{ .Name }}"
 }
 
+func (o OP_{{ .Name }}) Opcode() opcodes.Opcode {
+    return o.OP_{{ .Name }}
+}
+
 func {{ .Name }}({{ range .Args -}}
 		{{ index . 0 }} {{ index . 1 }},
 	{{- end -}} debug DebugInfo) OP_{{ .Name }} {

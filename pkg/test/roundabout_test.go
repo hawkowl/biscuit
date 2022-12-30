@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/go-test/deep"
-	"github.com/hawkowl/biscuit/pkg/convert"
+	"github.com/hawkowl/biscuit/pkg/assemble"
 	"github.com/hawkowl/biscuit/pkg/disassemble"
 )
 
@@ -53,12 +53,7 @@ func TestRoundtrip(t *testing.T) {
 
 	// Now re-encode
 	for _, i := range decoded {
-		c, err := convert.Convert(i)
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		e, err := c.Encode()
+		e, err := assemble.Encode(i.Opcode())
 		if err != nil {
 			t.Fatal(err)
 		}
