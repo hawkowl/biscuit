@@ -90,6 +90,10 @@ func Encode(inp opcodes.Opcode) (uint32, error) {
 		return EncodeSRLI(r)
 	case opcodes.OP_SRAI:
 		return EncodeSRAI(r)
+	case opcodes.OP_SFENCE_VMA:
+		return EncodeSFENCE_VMA(r)
+	case opcodes.OP_SRET:
+		return EncodeSRET(r)
 	case opcodes.OP_CSRRW:
 		return EncodeCSRRW(r)
 	case opcodes.OP_CSRRS:
@@ -102,6 +106,10 @@ func Encode(inp opcodes.Opcode) (uint32, error) {
 		return EncodeCSRRSI(r)
 	case opcodes.OP_CSRRCI:
 		return EncodeCSRRCI(r)
+	case opcodes.OP_FENCE_I:
+		return EncodeFENCE_I(r)
+	case opcodes.OP_ILLEGAL:
+		return EncodeILLEGAL(r)
 	default:
 		return 0, fmt.Errorf("unknown %v", inp)
 	}

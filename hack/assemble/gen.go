@@ -17,7 +17,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-const DEFAULT_EXTENSIONS = "i,zicsr"
+const DEFAULT_EXTENSIONS = "i,s,zicsr,zifencei"
 
 type Opcode struct {
 	Name   string

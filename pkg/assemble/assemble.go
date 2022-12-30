@@ -5,6 +5,7 @@ import (
 	"math/bits"
 
 	"github.com/hawkowl/biscuit/pkg/common"
+	"github.com/hawkowl/biscuit/pkg/opcodes"
 )
 
 type Opcode interface {
@@ -97,4 +98,8 @@ func GEN_ZIMM(inp uint32) (uint32, error) {
 func GEN_SHAMTW(inp uint32) (uint32, error) {
 	i, err := FitsIn(inp, 5)
 	return i << 20, err
+}
+
+func EncodeILLEGAL(o opcodes.OP_ILLEGAL) (uint32, error) {
+	return 0, nil
 }

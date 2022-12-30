@@ -84,3 +84,21 @@ func DEC_RS1(inst uint32) uint32 {
 func DEC_RS2(inst uint32) uint32 {
 	return field(inst, 20, 5)
 }
+
+type OP_ILLEGAL struct {
+	opcodes.OP_ILLEGAL
+}
+
+func (o OP_ILLEGAL) Describe() string {
+	return "ILLEGAL"
+}
+
+func (o OP_ILLEGAL) Opcode() opcodes.Opcode {
+	return o.OP_ILLEGAL
+}
+
+func ILLEGAL() OP_ILLEGAL {
+	return OP_ILLEGAL{
+		opcodes.OP_ILLEGAL{},
+	}
+}

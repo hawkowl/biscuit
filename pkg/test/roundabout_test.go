@@ -21,8 +21,8 @@ func TestRoundtrip(t *testing.T) {
 		0x00269793,
 		0x00f606b3,
 		0x00b6a023,
-		//0x12050073, // fence.vma
-		//0x0000100f, // fence.i
+		0x12050073, // fence.vma
+		0x0000100f, // fence.i
 		0x00c12083,
 		0x01010113,
 		0x00008067,
@@ -36,7 +36,7 @@ func TestRoundtrip(t *testing.T) {
 		0x00269693,
 		0x00d606b3,
 		0x00f6a023,
-		// 0x12050073, // fence.vma
+		0x12050073, // fence.vma
 		0x00c12083,
 		0x01010113,
 	}

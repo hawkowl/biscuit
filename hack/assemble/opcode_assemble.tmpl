@@ -14,6 +14,8 @@ func Encode(inp opcodes.Opcode) (uint32, error) {
     case opcodes.OP_{{ .Name }}:
         return Encode{{ .Name }}(r)
     {{ end -}}
+    case opcodes.OP_ILLEGAL:
+        return EncodeILLEGAL(r)
     default:
         return 0, fmt.Errorf("unknown %v", inp)
     }

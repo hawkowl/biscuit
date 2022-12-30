@@ -14,3 +14,10 @@ type Components struct {
 type Opcode interface {
 	Components() Components
 }
+
+type OP_ILLEGAL struct {
+}
+
+func (o OP_ILLEGAL) Components() Components {
+	return Components{}
+}

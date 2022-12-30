@@ -129,6 +129,12 @@ func Match(inst uint32) (Opcode, error) {
 	if (inst^opcodes.MATCH_SRAI)&opcodes.MASK_SRAI == 0 {
 		return DecodeSRAI(inst), nil
 	}
+	if (inst^opcodes.MATCH_SFENCE_VMA)&opcodes.MASK_SFENCE_VMA == 0 {
+		return DecodeSFENCE_VMA(inst), nil
+	}
+	if (inst^opcodes.MATCH_SRET)&opcodes.MASK_SRET == 0 {
+		return DecodeSRET(inst), nil
+	}
 	if (inst^opcodes.MATCH_CSRRW)&opcodes.MASK_CSRRW == 0 {
 		return DecodeCSRRW(inst), nil
 	}
@@ -146,6 +152,9 @@ func Match(inst uint32) (Opcode, error) {
 	}
 	if (inst^opcodes.MATCH_CSRRCI)&opcodes.MASK_CSRRCI == 0 {
 		return DecodeCSRRCI(inst), nil
+	}
+	if (inst^opcodes.MATCH_FENCE_I)&opcodes.MASK_FENCE_I == 0 {
+		return DecodeFENCE_I(inst), nil
 	}
 	return nil, fmt.Errorf("Not found: %#032b %#08x", inst, inst)
 }
