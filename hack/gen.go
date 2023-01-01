@@ -17,13 +17,13 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-const DEFAULT_EXTENSIONS = "i,s,zicsr,zifencei"
+const DEFAULT_EXTENSIONS = "i,s,zicsr,zifencei,system"
 
 type Opcode struct {
 	Name   string
 	Mask   uint32
 	Match  uint32
-	Args   [][2]string
+	Args   [][3]string
 	Fields [][2]string
 }
 
@@ -34,7 +34,6 @@ type Data struct {
 var msblsb, args *regexp.Regexp
 
 func fileProcess(data *Data, filename string) error {
-
 	d, err := os.ReadFile(filename)
 	if err != nil {
 		return err
@@ -67,7 +66,7 @@ func fileProcess(data *Data, filename string) error {
 			Mask: uint32(2 ^ 32),
 		}
 		fields := make(map[string]int)
-		fieldNames := make([][2]string, 0)
+		fieldNames := make([][3]string, 0)
 
 		for i, f := range strings.Fields(ln) {
 			if i == 0 {
@@ -89,11 +88,12 @@ func fileProcess(data *Data, filename string) error {
 					_, ok := fields[fieldname]
 					if !ok {
 						fields[fieldname] = 1
-						if fieldname == "BIMM12" || fieldname == "IMM12" || fieldname == "JIMM20" {
-							fieldNames = append(fieldNames, [2]string{fieldname, "int32"})
-
+						if fieldname == "BIMM12" || fieldname == "IMM12" {
+							fieldNames = append(fieldNames, [3]string{fieldname, "int32", "12"})
+						} else if fieldname == "JIMM20" || fieldname == "IMM20" {
+							fieldNames = append(fieldNames, [3]string{fieldname, "int32", "20"})
 						} else {
-							fieldNames = append(fieldNames, [2]string{fieldname, "uint32"})
+							fieldNames = append(fieldNames, [3]string{fieldname, "uint32", "12"})
 						}
 					}
 
@@ -127,7 +127,6 @@ func fileProcess(data *Data, filename string) error {
 	}
 
 	return nil
-
 }
 
 func writeFile(tmpl *template.Template, data *Data, dest string) error {
@@ -142,19 +141,18 @@ func writeFile(tmpl *template.Template, data *Data, dest string) error {
 		return fmt.Errorf("failed to format %s: %w", dest, err)
 	}
 
-	return os.WriteFile(dest, formatted, 0666)
+	return os.WriteFile(dest, formatted, 0o666)
 }
 
 func process(opcodesPath string, extensions []string) error {
-
 	msblsb = regexp.MustCompile(`\s*(?P<msb>\d+.?)\.\.(?P<lsb>\d+.?)\s*=\s*(?P<val>\d[\w]*)[\s$]*`)
 	args = regexp.MustCompile(`\s?(?:(?:((?:j|b|z)?imm(?:12|20)?)(?:hi|lo)?)+|(r(?:s\d|d))+|(fm|pred|succ|csr|shamtw)+)\s?`)
 
-	tmplEncode := template.Must(template.ParseFiles("hack/assemble/opcode_encode.tmpl"))
-	tmplDecode := template.Must(template.ParseFiles("hack/assemble/opcode_decode.tmpl"))
-	tmplDefs := template.Must(template.ParseFiles("hack/assemble/opcode_defs.tmpl"))
-	tmplAssemble := template.Must(template.ParseFiles("hack/assemble/opcode_assemble.tmpl"))
-	tmplMatch := template.Must(template.ParseFiles("hack/assemble/opcode_match.tmpl"))
+	tmplEncode := template.Must(template.ParseFiles("hack/templates/opcode_encode.tmpl"))
+	tmplDecode := template.Must(template.ParseFiles("hack/templates/opcode_decode.tmpl"))
+	tmplDefs := template.Must(template.ParseFiles("hack/templates/opcode_defs.tmpl"))
+	tmplAssemble := template.Must(template.ParseFiles("hack/templates/opcode_assemble.tmpl"))
+	tmplMatch := template.Must(template.ParseFiles("hack/templates/opcode_match.tmpl"))
 
 	p, err := filepath.Abs(opcodesPath)
 	if err != nil {
@@ -215,7 +213,6 @@ func process(opcodesPath string, extensions []string) error {
 }
 
 func main() {
-
 	app := &cli.App{
 		Name:  "genopcodes",
 		Usage: "generate opcodes",
