@@ -88,7 +88,7 @@ const (
 
 type OP_LUI struct {
 	RD    uint32
-	IMM20 uint32
+	IMM20 int32
 }
 
 func (o OP_LUI) Components() Components {
@@ -100,7 +100,7 @@ func (o OP_LUI) Components() Components {
 
 type OP_AUIPC struct {
 	RD    uint32
-	IMM20 uint32
+	IMM20 int32
 }
 
 func (o OP_AUIPC) Components() Components {

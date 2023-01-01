@@ -3,10 +3,14 @@
 
 package disassemble
 
-import "github.com/hawkowl/biscuit/pkg/opcodes"
+import (
+	"github.com/hawkowl/biscuit/pkg/debuginfo"
+	"github.com/hawkowl/biscuit/pkg/opcodes"
+)
 
 type OP_CSRRW struct {
 	opcodes.OP_CSRRW
+	debug debuginfo.DebugInfo
 }
 
 func (o OP_CSRRW) Describe() string {
@@ -17,13 +21,19 @@ func (o OP_CSRRW) Opcode() opcodes.Opcode {
 	return o.OP_CSRRW
 }
 
-func CSRRW(RD uint32, RS1 uint32, CSR uint32, debug DebugInfo) OP_CSRRW {
+func (o OP_CSRRW) DebugInfo() debuginfo.DebugInfo {
+	return o.debug
+}
+
+func CSRRW(RD uint32, RS1 uint32, CSR uint32, debug debuginfo.DebugInfo) OP_CSRRW {
+
 	return OP_CSRRW{
-		opcodes.OP_CSRRW{
+		OP_CSRRW: opcodes.OP_CSRRW{
 			RD:  RD,
 			RS1: RS1,
 			CSR: CSR,
 		},
+		debug: debug,
 	}
 }
 
@@ -40,6 +50,7 @@ func DecodeCSRRW(inst uint32) OP_CSRRW {
 
 type OP_CSRRS struct {
 	opcodes.OP_CSRRS
+	debug debuginfo.DebugInfo
 }
 
 func (o OP_CSRRS) Describe() string {
@@ -50,13 +61,19 @@ func (o OP_CSRRS) Opcode() opcodes.Opcode {
 	return o.OP_CSRRS
 }
 
-func CSRRS(RD uint32, RS1 uint32, CSR uint32, debug DebugInfo) OP_CSRRS {
+func (o OP_CSRRS) DebugInfo() debuginfo.DebugInfo {
+	return o.debug
+}
+
+func CSRRS(RD uint32, RS1 uint32, CSR uint32, debug debuginfo.DebugInfo) OP_CSRRS {
+
 	return OP_CSRRS{
-		opcodes.OP_CSRRS{
+		OP_CSRRS: opcodes.OP_CSRRS{
 			RD:  RD,
 			RS1: RS1,
 			CSR: CSR,
 		},
+		debug: debug,
 	}
 }
 
@@ -73,6 +90,7 @@ func DecodeCSRRS(inst uint32) OP_CSRRS {
 
 type OP_CSRRC struct {
 	opcodes.OP_CSRRC
+	debug debuginfo.DebugInfo
 }
 
 func (o OP_CSRRC) Describe() string {
@@ -83,13 +101,19 @@ func (o OP_CSRRC) Opcode() opcodes.Opcode {
 	return o.OP_CSRRC
 }
 
-func CSRRC(RD uint32, RS1 uint32, CSR uint32, debug DebugInfo) OP_CSRRC {
+func (o OP_CSRRC) DebugInfo() debuginfo.DebugInfo {
+	return o.debug
+}
+
+func CSRRC(RD uint32, RS1 uint32, CSR uint32, debug debuginfo.DebugInfo) OP_CSRRC {
+
 	return OP_CSRRC{
-		opcodes.OP_CSRRC{
+		OP_CSRRC: opcodes.OP_CSRRC{
 			RD:  RD,
 			RS1: RS1,
 			CSR: CSR,
 		},
+		debug: debug,
 	}
 }
 
@@ -106,6 +130,7 @@ func DecodeCSRRC(inst uint32) OP_CSRRC {
 
 type OP_CSRRWI struct {
 	opcodes.OP_CSRRWI
+	debug debuginfo.DebugInfo
 }
 
 func (o OP_CSRRWI) Describe() string {
@@ -116,13 +141,19 @@ func (o OP_CSRRWI) Opcode() opcodes.Opcode {
 	return o.OP_CSRRWI
 }
 
-func CSRRWI(RD uint32, CSR uint32, ZIMM uint32, debug DebugInfo) OP_CSRRWI {
+func (o OP_CSRRWI) DebugInfo() debuginfo.DebugInfo {
+	return o.debug
+}
+
+func CSRRWI(RD uint32, CSR uint32, ZIMM uint32, debug debuginfo.DebugInfo) OP_CSRRWI {
+
 	return OP_CSRRWI{
-		opcodes.OP_CSRRWI{
+		OP_CSRRWI: opcodes.OP_CSRRWI{
 			RD:   RD,
 			CSR:  CSR,
 			ZIMM: ZIMM,
 		},
+		debug: debug,
 	}
 }
 
@@ -139,6 +170,7 @@ func DecodeCSRRWI(inst uint32) OP_CSRRWI {
 
 type OP_CSRRSI struct {
 	opcodes.OP_CSRRSI
+	debug debuginfo.DebugInfo
 }
 
 func (o OP_CSRRSI) Describe() string {
@@ -149,13 +181,19 @@ func (o OP_CSRRSI) Opcode() opcodes.Opcode {
 	return o.OP_CSRRSI
 }
 
-func CSRRSI(RD uint32, CSR uint32, ZIMM uint32, debug DebugInfo) OP_CSRRSI {
+func (o OP_CSRRSI) DebugInfo() debuginfo.DebugInfo {
+	return o.debug
+}
+
+func CSRRSI(RD uint32, CSR uint32, ZIMM uint32, debug debuginfo.DebugInfo) OP_CSRRSI {
+
 	return OP_CSRRSI{
-		opcodes.OP_CSRRSI{
+		OP_CSRRSI: opcodes.OP_CSRRSI{
 			RD:   RD,
 			CSR:  CSR,
 			ZIMM: ZIMM,
 		},
+		debug: debug,
 	}
 }
 
@@ -172,6 +210,7 @@ func DecodeCSRRSI(inst uint32) OP_CSRRSI {
 
 type OP_CSRRCI struct {
 	opcodes.OP_CSRRCI
+	debug debuginfo.DebugInfo
 }
 
 func (o OP_CSRRCI) Describe() string {
@@ -182,13 +221,19 @@ func (o OP_CSRRCI) Opcode() opcodes.Opcode {
 	return o.OP_CSRRCI
 }
 
-func CSRRCI(RD uint32, CSR uint32, ZIMM uint32, debug DebugInfo) OP_CSRRCI {
+func (o OP_CSRRCI) DebugInfo() debuginfo.DebugInfo {
+	return o.debug
+}
+
+func CSRRCI(RD uint32, CSR uint32, ZIMM uint32, debug debuginfo.DebugInfo) OP_CSRRCI {
+
 	return OP_CSRRCI{
-		opcodes.OP_CSRRCI{
+		OP_CSRRCI: opcodes.OP_CSRRCI{
 			RD:   RD,
 			CSR:  CSR,
 			ZIMM: ZIMM,
 		},
+		debug: debug,
 	}
 }
 

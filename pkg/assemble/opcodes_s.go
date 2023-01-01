@@ -14,11 +14,9 @@ func EncodeSFENCE_VMA(o opcodes.OP_SFENCE_VMA) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x12000073 | RS1 | RS2, nil
 }
 
 func EncodeSRET(o opcodes.OP_SRET) (uint32, error) {
-
 	return 0x10200073, nil
 }

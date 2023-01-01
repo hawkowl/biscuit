@@ -108,6 +108,12 @@ func Encode(inp opcodes.Opcode) (uint32, error) {
 		return EncodeCSRRCI(r)
 	case opcodes.OP_FENCE_I:
 		return EncodeFENCE_I(r)
+	case opcodes.OP_MRET:
+		return EncodeMRET(r)
+	case opcodes.OP_DRET:
+		return EncodeDRET(r)
+	case opcodes.OP_WFI:
+		return EncodeWFI(r)
 	case opcodes.OP_ILLEGAL:
 		return EncodeILLEGAL(r)
 	default:

@@ -18,6 +18,5 @@ func EncodeFENCE_I(o opcodes.OP_FENCE_I) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x0000100F | IMM12 | RS1 | RD, nil
 }

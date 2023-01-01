@@ -14,7 +14,6 @@ func EncodeLUI(o opcodes.OP_LUI) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00000037 | RD | IMM20, nil
 }
 
@@ -27,7 +26,6 @@ func EncodeAUIPC(o opcodes.OP_AUIPC) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00000017 | RD | IMM20, nil
 }
 
@@ -40,7 +38,6 @@ func EncodeJAL(o opcodes.OP_JAL) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x0000006F | RD | JIMM20, nil
 }
 
@@ -57,7 +54,6 @@ func EncodeJALR(o opcodes.OP_JALR) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00000067 | RD | RS1 | IMM12, nil
 }
 
@@ -78,7 +74,6 @@ func EncodeBEQ(o opcodes.OP_BEQ) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00000063 | BIMM12HI | RS1 | RS2 | BIMM12LO, nil
 }
 
@@ -99,7 +94,6 @@ func EncodeBNE(o opcodes.OP_BNE) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00001063 | BIMM12HI | RS1 | RS2 | BIMM12LO, nil
 }
 
@@ -120,7 +114,6 @@ func EncodeBLT(o opcodes.OP_BLT) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00004063 | BIMM12HI | RS1 | RS2 | BIMM12LO, nil
 }
 
@@ -141,7 +134,6 @@ func EncodeBGE(o opcodes.OP_BGE) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00005063 | BIMM12HI | RS1 | RS2 | BIMM12LO, nil
 }
 
@@ -162,7 +154,6 @@ func EncodeBLTU(o opcodes.OP_BLTU) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00006063 | BIMM12HI | RS1 | RS2 | BIMM12LO, nil
 }
 
@@ -183,7 +174,6 @@ func EncodeBGEU(o opcodes.OP_BGEU) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00007063 | BIMM12HI | RS1 | RS2 | BIMM12LO, nil
 }
 
@@ -200,7 +190,6 @@ func EncodeLB(o opcodes.OP_LB) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00000003 | RD | RS1 | IMM12, nil
 }
 
@@ -217,7 +206,6 @@ func EncodeLH(o opcodes.OP_LH) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00001003 | RD | RS1 | IMM12, nil
 }
 
@@ -234,7 +222,6 @@ func EncodeLW(o opcodes.OP_LW) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00002003 | RD | RS1 | IMM12, nil
 }
 
@@ -251,7 +238,6 @@ func EncodeLBU(o opcodes.OP_LBU) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00004003 | RD | RS1 | IMM12, nil
 }
 
@@ -268,7 +254,6 @@ func EncodeLHU(o opcodes.OP_LHU) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00005003 | RD | RS1 | IMM12, nil
 }
 
@@ -289,7 +274,6 @@ func EncodeSB(o opcodes.OP_SB) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00000023 | IMM12HI | RS1 | RS2 | IMM12LO, nil
 }
 
@@ -310,7 +294,6 @@ func EncodeSH(o opcodes.OP_SH) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00001023 | IMM12HI | RS1 | RS2 | IMM12LO, nil
 }
 
@@ -331,7 +314,6 @@ func EncodeSW(o opcodes.OP_SW) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00002023 | IMM12HI | RS1 | RS2 | IMM12LO, nil
 }
 
@@ -348,7 +330,6 @@ func EncodeADDI(o opcodes.OP_ADDI) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00000013 | RD | RS1 | IMM12, nil
 }
 
@@ -365,7 +346,6 @@ func EncodeSLTI(o opcodes.OP_SLTI) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00002013 | RD | RS1 | IMM12, nil
 }
 
@@ -382,7 +362,6 @@ func EncodeSLTIU(o opcodes.OP_SLTIU) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00003013 | RD | RS1 | IMM12, nil
 }
 
@@ -399,7 +378,6 @@ func EncodeXORI(o opcodes.OP_XORI) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00004013 | RD | RS1 | IMM12, nil
 }
 
@@ -416,7 +394,6 @@ func EncodeORI(o opcodes.OP_ORI) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00006013 | RD | RS1 | IMM12, nil
 }
 
@@ -433,7 +410,6 @@ func EncodeANDI(o opcodes.OP_ANDI) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00007013 | RD | RS1 | IMM12, nil
 }
 
@@ -450,7 +426,6 @@ func EncodeADD(o opcodes.OP_ADD) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00000033 | RD | RS1 | RS2, nil
 }
 
@@ -467,7 +442,6 @@ func EncodeSUB(o opcodes.OP_SUB) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x40000033 | RD | RS1 | RS2, nil
 }
 
@@ -484,7 +458,6 @@ func EncodeSLL(o opcodes.OP_SLL) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00001033 | RD | RS1 | RS2, nil
 }
 
@@ -501,7 +474,6 @@ func EncodeSLT(o opcodes.OP_SLT) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00002033 | RD | RS1 | RS2, nil
 }
 
@@ -518,7 +490,6 @@ func EncodeSLTU(o opcodes.OP_SLTU) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00003033 | RD | RS1 | RS2, nil
 }
 
@@ -535,7 +506,6 @@ func EncodeXOR(o opcodes.OP_XOR) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00004033 | RD | RS1 | RS2, nil
 }
 
@@ -552,7 +522,6 @@ func EncodeSRL(o opcodes.OP_SRL) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00005033 | RD | RS1 | RS2, nil
 }
 
@@ -569,7 +538,6 @@ func EncodeSRA(o opcodes.OP_SRA) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x40005033 | RD | RS1 | RS2, nil
 }
 
@@ -586,7 +554,6 @@ func EncodeOR(o opcodes.OP_OR) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00006033 | RD | RS1 | RS2, nil
 }
 
@@ -603,7 +570,6 @@ func EncodeAND(o opcodes.OP_AND) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00007033 | RD | RS1 | RS2, nil
 }
 
@@ -628,17 +594,14 @@ func EncodeFENCE(o opcodes.OP_FENCE) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x0000000F | FM | PRED | SUCC | RS1 | RD, nil
 }
 
 func EncodeECALL(o opcodes.OP_ECALL) (uint32, error) {
-
 	return 0x00000073, nil
 }
 
 func EncodeEBREAK(o opcodes.OP_EBREAK) (uint32, error) {
-
 	return 0x00100073, nil
 }
 
@@ -655,7 +618,6 @@ func EncodeSLLI(o opcodes.OP_SLLI) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00001013 | RD | RS1 | SHAMTW, nil
 }
 
@@ -672,7 +634,6 @@ func EncodeSRLI(o opcodes.OP_SRLI) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00005013 | RD | RS1 | SHAMTW, nil
 }
 
@@ -689,6 +650,5 @@ func EncodeSRAI(o opcodes.OP_SRAI) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x40005013 | RD | RS1 | SHAMTW, nil
 }

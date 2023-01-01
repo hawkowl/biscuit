@@ -2,5 +2,3 @@
 // Built from RISC-V ISA opcode definitions: https://github.com/riscv/riscv-opcodes
 
 package opcodes
-
-const ()

@@ -156,5 +156,14 @@ func Match(inst uint32) (Opcode, error) {
 	if (inst^opcodes.MATCH_FENCE_I)&opcodes.MASK_FENCE_I == 0 {
 		return DecodeFENCE_I(inst), nil
 	}
+	if (inst^opcodes.MATCH_MRET)&opcodes.MASK_MRET == 0 {
+		return DecodeMRET(inst), nil
+	}
+	if (inst^opcodes.MATCH_DRET)&opcodes.MASK_DRET == 0 {
+		return DecodeDRET(inst), nil
+	}
+	if (inst^opcodes.MATCH_WFI)&opcodes.MASK_WFI == 0 {
+		return DecodeWFI(inst), nil
+	}
 	return nil, fmt.Errorf("Not found: %#032b %#08x", inst, inst)
 }

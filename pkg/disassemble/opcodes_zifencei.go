@@ -3,10 +3,14 @@
 
 package disassemble
 
-import "github.com/hawkowl/biscuit/pkg/opcodes"
+import (
+	"github.com/hawkowl/biscuit/pkg/debuginfo"
+	"github.com/hawkowl/biscuit/pkg/opcodes"
+)
 
 type OP_FENCE_I struct {
 	opcodes.OP_FENCE_I
+	debug debuginfo.DebugInfo
 }
 
 func (o OP_FENCE_I) Describe() string {
@@ -17,13 +21,19 @@ func (o OP_FENCE_I) Opcode() opcodes.Opcode {
 	return o.OP_FENCE_I
 }
 
-func FENCE_I(IMM12 int32, RS1 uint32, RD uint32, debug DebugInfo) OP_FENCE_I {
+func (o OP_FENCE_I) DebugInfo() debuginfo.DebugInfo {
+	return o.debug
+}
+
+func FENCE_I(IMM12 int32, RS1 uint32, RD uint32, debug debuginfo.DebugInfo) OP_FENCE_I {
+
 	return OP_FENCE_I{
-		opcodes.OP_FENCE_I{
+		OP_FENCE_I: opcodes.OP_FENCE_I{
 			IMM12: IMM12,
 			RS1:   RS1,
 			RD:    RD,
 		},
+		debug: debug,
 	}
 }
 

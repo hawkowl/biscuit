@@ -18,7 +18,6 @@ func EncodeCSRRW(o opcodes.OP_CSRRW) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00001073 | RD | RS1 | CSR, nil
 }
 
@@ -35,7 +34,6 @@ func EncodeCSRRS(o opcodes.OP_CSRRS) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00002073 | RD | RS1 | CSR, nil
 }
 
@@ -52,7 +50,6 @@ func EncodeCSRRC(o opcodes.OP_CSRRC) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00003073 | RD | RS1 | CSR, nil
 }
 
@@ -69,7 +66,6 @@ func EncodeCSRRWI(o opcodes.OP_CSRRWI) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00005073 | RD | CSR | ZIMM, nil
 }
 
@@ -86,7 +82,6 @@ func EncodeCSRRSI(o opcodes.OP_CSRRSI) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00006073 | RD | CSR | ZIMM, nil
 }
 
@@ -103,6 +98,5 @@ func EncodeCSRRCI(o opcodes.OP_CSRRCI) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return 0x00007073 | RD | CSR | ZIMM, nil
 }

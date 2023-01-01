@@ -3,10 +3,14 @@
 
 package disassemble
 
-import "github.com/hawkowl/biscuit/pkg/opcodes"
+import (
+	"github.com/hawkowl/biscuit/pkg/debuginfo"
+	"github.com/hawkowl/biscuit/pkg/opcodes"
+)
 
 type OP_SFENCE_VMA struct {
 	opcodes.OP_SFENCE_VMA
+	debug debuginfo.DebugInfo
 }
 
 func (o OP_SFENCE_VMA) Describe() string {
@@ -17,12 +21,18 @@ func (o OP_SFENCE_VMA) Opcode() opcodes.Opcode {
 	return o.OP_SFENCE_VMA
 }
 
-func SFENCE_VMA(RS1 uint32, RS2 uint32, debug DebugInfo) OP_SFENCE_VMA {
+func (o OP_SFENCE_VMA) DebugInfo() debuginfo.DebugInfo {
+	return o.debug
+}
+
+func SFENCE_VMA(RS1 uint32, RS2 uint32, debug debuginfo.DebugInfo) OP_SFENCE_VMA {
+
 	return OP_SFENCE_VMA{
-		opcodes.OP_SFENCE_VMA{
+		OP_SFENCE_VMA: opcodes.OP_SFENCE_VMA{
 			RS1: RS1,
 			RS2: RS2,
 		},
+		debug: debug,
 	}
 }
 
@@ -38,6 +48,7 @@ func DecodeSFENCE_VMA(inst uint32) OP_SFENCE_VMA {
 
 type OP_SRET struct {
 	opcodes.OP_SRET
+	debug debuginfo.DebugInfo
 }
 
 func (o OP_SRET) Describe() string {
@@ -48,9 +59,15 @@ func (o OP_SRET) Opcode() opcodes.Opcode {
 	return o.OP_SRET
 }
 
-func SRET(debug DebugInfo) OP_SRET {
+func (o OP_SRET) DebugInfo() debuginfo.DebugInfo {
+	return o.debug
+}
+
+func SRET(debug debuginfo.DebugInfo) OP_SRET {
+
 	return OP_SRET{
-		opcodes.OP_SRET{},
+		OP_SRET: opcodes.OP_SRET{},
+		debug:   debug,
 	}
 }
 
