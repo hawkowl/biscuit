@@ -20,8 +20,8 @@ func FitsIn(inp uint32, nbits int) (uint32, error) {
 	return uint32(inp), nil
 }
 
-func GEN_IMM20(inp uint32) (uint32, error) {
-	i, err := FitsIn(inp, 20)
+func GEN_IMM20(inp int32) (uint32, error) {
+	i, err := common.ImmI(inp, 20)
 	return i << 12, err
 }
 

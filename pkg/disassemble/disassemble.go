@@ -2,6 +2,7 @@ package disassemble
 
 import (
 	"github.com/hawkowl/biscuit/pkg/common"
+	"github.com/hawkowl/biscuit/pkg/debuginfo"
 	"github.com/hawkowl/biscuit/pkg/opcodes"
 )
 
@@ -9,12 +10,10 @@ func field(in, start, length uint32) uint32 {
 	return (in >> start) << (32 - length) >> (32 - length)
 }
 
-type DebugInfo interface {
-}
-
 type Opcode interface {
 	Describe() string
 	Opcode() opcodes.Opcode
+	DebugInfo() debuginfo.DebugInfo
 }
 
 func DEC_BIMM12(inst uint32) int32 {
@@ -38,8 +37,11 @@ func DEC_IMM12(inst uint32) int32 {
 	)
 }
 
-func DEC_IMM20(inst uint32) uint32 {
-	return field(inst, 12, 20)
+func DEC_IMM20(inst uint32) int32 {
+	return common.SignExtend[uint32, int32](
+		field(inst, 12, 20),
+		20,
+	)
 }
 
 func DEC_JIMM20(inst uint32) int32 {
@@ -97,8 +99,16 @@ func (o OP_ILLEGAL) Opcode() opcodes.Opcode {
 	return o.OP_ILLEGAL
 }
 
+func (o OP_ILLEGAL) DebugInfo() debuginfo.DebugInfo {
+	return nil
+}
+
 func ILLEGAL() OP_ILLEGAL {
 	return OP_ILLEGAL{
 		opcodes.OP_ILLEGAL{},
 	}
+}
+
+func NOP(debuginfo debuginfo.DebugInfo) Opcode {
+	return ADDI(0, 0, 0, debuginfo)
 }

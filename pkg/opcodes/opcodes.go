@@ -4,11 +4,11 @@
 package opcodes
 
 type Components struct {
-	RD, RS1, RS2          uint32
-	CSR                   uint32
-	FM, PRED, SUCC        uint32
-	IMM12, BIMM12, JIMM20 int32
-	ZIMM, IMM20, SHAMTW   uint32
+	RD, RS1, RS2                 uint32
+	CSR                          uint32
+	FM, PRED, SUCC               uint32
+	IMM12, BIMM12, JIMM20, IMM20 int32
+	ZIMM, SHAMTW                 uint32
 }
 
 type Opcode interface {
