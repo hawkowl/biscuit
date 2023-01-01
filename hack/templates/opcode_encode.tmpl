@@ -12,9 +12,8 @@ func Encode{{ .Name }}(o opcodes.OP_{{ .Name }}) (uint32, error) {
 	if err != nil {
 		return 0, err
 	}
-{{ end }}
-
-	return {{ printf "0x%08X" .Match }} 
+{{ end -}}
+	return {{ printf "0x%08X" .Match }}
 	{{- range .Fields -}}
 	| {{ index . 0 }}
 {{- end -}}, nil
