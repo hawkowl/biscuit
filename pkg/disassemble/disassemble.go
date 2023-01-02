@@ -47,7 +47,7 @@ func DEC_IMM20(inst uint32) int32 {
 func DEC_JIMM20(inst uint32) int32 {
 	return common.SignExtend[uint32, int32](
 		field(inst, 31, 1)<<20|field(inst, 21, 10)<<1|field(inst, 19, 1)<<11|field(inst, 12, 8)<<12,
-		20,
+		21,
 	)
 }
 
