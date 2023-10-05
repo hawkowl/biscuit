@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"embed"
 	"errors"
 	"fmt"
 	"go/format"
@@ -16,6 +17,9 @@ import (
 
 	"github.com/urfave/cli/v2"
 )
+
+//go:embed templates/*
+var templ embed.FS
 
 const DEFAULT_EXTENSIONS = "i,s,zicsr,zifencei,system"
 
@@ -148,11 +152,10 @@ func process(opcodesPath string, extensions []string) error {
 	msblsb = regexp.MustCompile(`\s*(?P<msb>\d+.?)\.\.(?P<lsb>\d+.?)\s*=\s*(?P<val>\d[\w]*)[\s$]*`)
 	args = regexp.MustCompile(`\s?(?:(?:((?:j|b|z)?imm(?:12|20)?)(?:hi|lo)?)+|(r(?:s\d|d))+|(fm|pred|succ|csr|shamtw)+)\s?`)
 
-	tmplEncode := template.Must(template.ParseFiles("hack/templates/opcode_encode.tmpl"))
-	tmplDecode := template.Must(template.ParseFiles("hack/templates/opcode_decode.tmpl"))
-	tmplDefs := template.Must(template.ParseFiles("hack/templates/opcode_defs.tmpl"))
-	tmplAssemble := template.Must(template.ParseFiles("hack/templates/opcode_assemble.tmpl"))
-	tmplMatch := template.Must(template.ParseFiles("hack/templates/opcode_match.tmpl"))
+	tpl, err := template.ParseFS(templ, "templates/*")
+	if err != nil {
+		return err
+	}
 
 	p, err := filepath.Abs(opcodesPath)
 	if err != nil {
@@ -181,17 +184,17 @@ func process(opcodesPath string, extensions []string) error {
 			}
 		}
 
-		err = writeFile(tmplEncode, o, fmt.Sprintf("pkg/assemble/opcodes_%s.go", ext))
+		err = writeFile(tpl.Lookup("opcode_encode.tmpl"), o, fmt.Sprintf("pkg/assemble/opcodes_%s.go", ext))
 		if err != nil {
 			return err
 		}
 
-		err = writeFile(tmplDecode, o, fmt.Sprintf("pkg/disassemble/opcodes_%s.go", ext))
+		err = writeFile(tpl.Lookup("opcode_decode.tmpl"), o, fmt.Sprintf("pkg/disassemble/opcodes_%s.go", ext))
 		if err != nil {
 			return err
 		}
 
-		err = writeFile(tmplDefs, o, fmt.Sprintf("pkg/opcodes/opcodes_%s.go", ext))
+		err = writeFile(tpl.Lookup("opcode_defs.tmpl"), o, fmt.Sprintf("pkg/opcodes/opcodes_%s.go", ext))
 		if err != nil {
 			return err
 		}
@@ -199,12 +202,12 @@ func process(opcodesPath string, extensions []string) error {
 		all.Opcodes = append(all.Opcodes, o.Opcodes...)
 	}
 
-	err = writeFile(tmplAssemble, all, "pkg/assemble/opcodes.go")
+	err = writeFile(tpl.Lookup("opcode_assemble.tmpl"), all, "pkg/assemble/opcodes.go")
 	if err != nil {
 		return err
 	}
 
-	err = writeFile(tmplMatch, all, "pkg/disassemble/match.go")
+	err = writeFile(tpl.Lookup("opcode_match.tmpl"), all, "pkg/disassemble/match.go")
 	if err != nil {
 		return err
 	}
