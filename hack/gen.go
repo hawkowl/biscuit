@@ -27,7 +27,7 @@ type Opcode struct {
 	Name   string
 	Mask   uint32
 	Match  uint32
-	Args   [][3]string
+	Args   [][4]string
 	Fields [][2]string
 }
 
@@ -70,7 +70,7 @@ func fileProcess(data *Data, filename string) error {
 			Mask: uint32(2 ^ 32),
 		}
 		fields := make(map[string]int)
-		fieldNames := make([][3]string, 0)
+		argDefinitions := make([][4]string, 0)
 
 		for i, f := range strings.Fields(ln) {
 			if i == 0 {
@@ -93,11 +93,11 @@ func fileProcess(data *Data, filename string) error {
 					if !ok {
 						fields[fieldname] = 1
 						if fieldname == "BIMM12" || fieldname == "IMM12" {
-							fieldNames = append(fieldNames, [3]string{fieldname, "int32", "12"})
+							argDefinitions = append(argDefinitions, [4]string{fieldname, "int32", "12", "%#x"})
 						} else if fieldname == "JIMM20" || fieldname == "IMM20" {
-							fieldNames = append(fieldNames, [3]string{fieldname, "int32", "20"})
+							argDefinitions = append(argDefinitions, [4]string{fieldname, "int32", "20", "%#x"})
 						} else {
-							fieldNames = append(fieldNames, [3]string{fieldname, "uint32", "12"})
+							argDefinitions = append(argDefinitions, [4]string{fieldname, "uint32", "12", "%#x"})
 						}
 					}
 
@@ -125,7 +125,7 @@ func fileProcess(data *Data, filename string) error {
 				op.Mask = op.Mask | bits.RotateLeft32(uint32(1<<(msb-lsb+1)-1), lsb)
 			}
 		}
-		op.Args = fieldNames
+		op.Args = argDefinitions
 		data.Opcodes = append(data.Opcodes, op)
 
 	}
@@ -152,7 +152,18 @@ func process(opcodesPath string, extensions []string) error {
 	msblsb = regexp.MustCompile(`\s*(?P<msb>\d+.?)\.\.(?P<lsb>\d+.?)\s*=\s*(?P<val>\d[\w]*)[\s$]*`)
 	args = regexp.MustCompile(`\s?(?:(?:((?:j|b|z)?imm(?:12|20)?)(?:hi|lo)?)+|(r(?:s\d|d))+|(fm|pred|succ|csr|shamtw)+)\s?`)
 
-	tpl, err := template.ParseFS(templ, "templates/*")
+	tpl := template.New("")
+	tpl = tpl.Funcs(template.FuncMap{
+		"lower": func(i interface{}) (interface{}, error) {
+			k, ok := i.(string)
+			if !ok {
+				return "", errors.New("idk")
+			}
+			return strings.ToLower(k), nil
+		},
+	})
+
+	tpl, err := tpl.ParseFS(templ, "templates/*")
 	if err != nil {
 		return err
 	}

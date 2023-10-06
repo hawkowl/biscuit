@@ -4,35 +4,60 @@
 package disassemble
 
 import (
+    "fmt"
+    "strings"
+
     "github.com/hawkowl/biscuit/pkg/opcodes"
     "github.com/hawkowl/biscuit/pkg/debuginfo"
 )
 
-{{ range .Opcodes -}}
-type OP_{{ .Name }} struct {
-	opcodes.OP_{{ .Name }}
+{{ range $opcode := .Opcodes -}}
+type OP_{{ $opcode.Name }} struct {
+	opcodes.OP_{{ $opcode.Name }}
     debug debuginfo.DebugInfo
 }
 
-func (o OP_{{ .Name }}) Describe() string {
-    return "{{ .Name }}"
+var _ fmt.Stringer = OP_{{ $opcode.Name }}{}
+
+func (o OP_{{ $opcode.Name }}) String() string {
+    return strings.Join([]string{"{{ $opcode.Name }}" {{- range $x := .Args }}, o.{{ index $x 0 | lower }}(){{- end -}}}, " ")
 }
 
-func (o OP_{{ .Name }}) Opcode() opcodes.Opcode {
-    return o.OP_{{ .Name }}
+{{ range $x := .Args }}
+{{- with $name := index $x 0 -}}
+{{- if eq $name "RS1" "RS2" "RD" -}}
+func (o OP_{{ $opcode.Name }}) {{ lower $name }}() string {
+    return fmt.Sprintf("{{ lower $name }}=x%d", o.{{ $name }})
+}
+{{- else -}}
+func (o OP_{{ $opcode.Name }}) {{ lower $name }}() string {
+    if o.{{ $name }} == 0 {
+        return "{{ lower $name }}=0"
+    } else {
+        return fmt.Sprintf("{{ lower $name }}=%#x (%d)", uint64(o.{{ $name }}), o.{{ $name }})
+    }
+}
+{{- end -}}
+{{- end }}
+
+{{ end -}}
+
+
+func (o OP_{{ $opcode.Name }}) Opcode() opcodes.Opcode {
+    return o.OP_{{ $opcode.Name }}
 }
 
-func (o OP_{{ .Name }}) DebugInfo() debuginfo.DebugInfo {
+func (o OP_{{ $opcode.Name }}) DebugInfo() debuginfo.DebugInfo {
     return o.debug
 }
 
-func {{ .Name }}({{ range .Args -}}
+func {{ $opcode.Name }}({{ range $opcode.Args -}}
 		{{ index . 0 }} {{ index . 1 }},
-	{{- end -}} debug debuginfo.DebugInfo) OP_{{ .Name }} {
+	{{- end -}} debug debuginfo.DebugInfo) OP_{{ $opcode.Name }} {
 
-	return OP_{{ .Name }}{
-		OP_{{ .Name }}: opcodes.OP_{{ .Name }}{
-		{{ range .Args -}}
+	return OP_{{ $opcode.Name }}{
+		OP_{{ $opcode.Name }}: opcodes.OP_{{ $opcode.Name }}{
+		{{ range $opcode.Args -}}
 			{{ index . 0 }}: {{ index . 0 }},
 		{{ end -}}
 		},
@@ -40,8 +65,8 @@ func {{ .Name }}({{ range .Args -}}
 	}
 }
 
-func Decode{{ .Name }}(inst uint32) OP_{{ .Name }} {
-    r := opcodes.OP_{{ .Name }}{}
+func Decode{{ $opcode.Name }}(inst uint32) OP_{{ $opcode.Name }} {
+    r := opcodes.OP_{{ $opcode.Name }}{}
 
     {{ range .Fields -}}
         {{ if index . 0 | eq "IMM12LO" }}
@@ -53,7 +78,7 @@ func Decode{{ .Name }}(inst uint32) OP_{{ .Name }} {
     {{ end -}}
 
     return OP_{{.Name}}{
-        OP_{{ .Name }}: r,
+        OP_{{ $opcode.Name }}: r,
     }
 }
 

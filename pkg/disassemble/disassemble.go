@@ -1,6 +1,8 @@
 package disassemble
 
 import (
+	"fmt"
+
 	"github.com/hawkowl/biscuit/pkg/common"
 	"github.com/hawkowl/biscuit/pkg/debuginfo"
 	"github.com/hawkowl/biscuit/pkg/opcodes"
@@ -11,7 +13,7 @@ func field(in, start, length uint32) uint32 {
 }
 
 type Opcode interface {
-	Describe() string
+	fmt.Stringer
 	Opcode() opcodes.Opcode
 	DebugInfo() debuginfo.DebugInfo
 }
@@ -25,7 +27,7 @@ func DEC_BIMM12(inst uint32) int32 {
 
 func DEC_IMM12HILO(inst uint32) int32 {
 	return common.SignExtend[uint32, int32](
-		field(inst, 25, 7)<<4|field(inst, 7, 4),
+		field(inst, 25, 7)<<5|field(inst, 7, 4),
 		12,
 	)
 }
@@ -91,7 +93,7 @@ type OP_ILLEGAL struct {
 	opcodes.OP_ILLEGAL
 }
 
-func (o OP_ILLEGAL) Describe() string {
+func (o OP_ILLEGAL) String() string {
 	return "ILLEGAL"
 }
 
