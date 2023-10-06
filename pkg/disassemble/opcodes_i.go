@@ -4,6 +4,9 @@
 package disassemble
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/hawkowl/biscuit/pkg/debuginfo"
 	"github.com/hawkowl/biscuit/pkg/opcodes"
 )
@@ -13,8 +16,22 @@ type OP_LUI struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_LUI) Describe() string {
-	return "LUI"
+var _ fmt.Stringer = OP_LUI{}
+
+func (o OP_LUI) String() string {
+	return strings.Join([]string{"LUI", o.rd(), o.imm20()}, " ")
+}
+
+func (o OP_LUI) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_LUI) imm20() string {
+	if o.IMM20 == 0 {
+		return "imm20=0"
+	} else {
+		return fmt.Sprintf("imm20=%#x (%d)", uint64(o.IMM20), o.IMM20)
+	}
 }
 
 func (o OP_LUI) Opcode() opcodes.Opcode {
@@ -51,8 +68,22 @@ type OP_AUIPC struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_AUIPC) Describe() string {
-	return "AUIPC"
+var _ fmt.Stringer = OP_AUIPC{}
+
+func (o OP_AUIPC) String() string {
+	return strings.Join([]string{"AUIPC", o.rd(), o.imm20()}, " ")
+}
+
+func (o OP_AUIPC) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_AUIPC) imm20() string {
+	if o.IMM20 == 0 {
+		return "imm20=0"
+	} else {
+		return fmt.Sprintf("imm20=%#x (%d)", uint64(o.IMM20), o.IMM20)
+	}
 }
 
 func (o OP_AUIPC) Opcode() opcodes.Opcode {
@@ -89,8 +120,22 @@ type OP_JAL struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_JAL) Describe() string {
-	return "JAL"
+var _ fmt.Stringer = OP_JAL{}
+
+func (o OP_JAL) String() string {
+	return strings.Join([]string{"JAL", o.rd(), o.jimm20()}, " ")
+}
+
+func (o OP_JAL) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_JAL) jimm20() string {
+	if o.JIMM20 == 0 {
+		return "jimm20=0"
+	} else {
+		return fmt.Sprintf("jimm20=%#x (%d)", uint64(o.JIMM20), o.JIMM20)
+	}
 }
 
 func (o OP_JAL) Opcode() opcodes.Opcode {
@@ -127,8 +172,26 @@ type OP_JALR struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_JALR) Describe() string {
-	return "JALR"
+var _ fmt.Stringer = OP_JALR{}
+
+func (o OP_JALR) String() string {
+	return strings.Join([]string{"JALR", o.rd(), o.rs1(), o.imm12()}, " ")
+}
+
+func (o OP_JALR) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_JALR) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_JALR) imm12() string {
+	if o.IMM12 == 0 {
+		return "imm12=0"
+	} else {
+		return fmt.Sprintf("imm12=%#x (%d)", uint64(o.IMM12), o.IMM12)
+	}
 }
 
 func (o OP_JALR) Opcode() opcodes.Opcode {
@@ -167,8 +230,26 @@ type OP_BEQ struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_BEQ) Describe() string {
-	return "BEQ"
+var _ fmt.Stringer = OP_BEQ{}
+
+func (o OP_BEQ) String() string {
+	return strings.Join([]string{"BEQ", o.bimm12(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_BEQ) bimm12() string {
+	if o.BIMM12 == 0 {
+		return "bimm12=0"
+	} else {
+		return fmt.Sprintf("bimm12=%#x (%d)", uint64(o.BIMM12), o.BIMM12)
+	}
+}
+
+func (o OP_BEQ) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_BEQ) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_BEQ) Opcode() opcodes.Opcode {
@@ -208,8 +289,26 @@ type OP_BNE struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_BNE) Describe() string {
-	return "BNE"
+var _ fmt.Stringer = OP_BNE{}
+
+func (o OP_BNE) String() string {
+	return strings.Join([]string{"BNE", o.bimm12(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_BNE) bimm12() string {
+	if o.BIMM12 == 0 {
+		return "bimm12=0"
+	} else {
+		return fmt.Sprintf("bimm12=%#x (%d)", uint64(o.BIMM12), o.BIMM12)
+	}
+}
+
+func (o OP_BNE) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_BNE) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_BNE) Opcode() opcodes.Opcode {
@@ -249,8 +348,26 @@ type OP_BLT struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_BLT) Describe() string {
-	return "BLT"
+var _ fmt.Stringer = OP_BLT{}
+
+func (o OP_BLT) String() string {
+	return strings.Join([]string{"BLT", o.bimm12(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_BLT) bimm12() string {
+	if o.BIMM12 == 0 {
+		return "bimm12=0"
+	} else {
+		return fmt.Sprintf("bimm12=%#x (%d)", uint64(o.BIMM12), o.BIMM12)
+	}
+}
+
+func (o OP_BLT) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_BLT) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_BLT) Opcode() opcodes.Opcode {
@@ -290,8 +407,26 @@ type OP_BGE struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_BGE) Describe() string {
-	return "BGE"
+var _ fmt.Stringer = OP_BGE{}
+
+func (o OP_BGE) String() string {
+	return strings.Join([]string{"BGE", o.bimm12(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_BGE) bimm12() string {
+	if o.BIMM12 == 0 {
+		return "bimm12=0"
+	} else {
+		return fmt.Sprintf("bimm12=%#x (%d)", uint64(o.BIMM12), o.BIMM12)
+	}
+}
+
+func (o OP_BGE) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_BGE) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_BGE) Opcode() opcodes.Opcode {
@@ -331,8 +466,26 @@ type OP_BLTU struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_BLTU) Describe() string {
-	return "BLTU"
+var _ fmt.Stringer = OP_BLTU{}
+
+func (o OP_BLTU) String() string {
+	return strings.Join([]string{"BLTU", o.bimm12(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_BLTU) bimm12() string {
+	if o.BIMM12 == 0 {
+		return "bimm12=0"
+	} else {
+		return fmt.Sprintf("bimm12=%#x (%d)", uint64(o.BIMM12), o.BIMM12)
+	}
+}
+
+func (o OP_BLTU) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_BLTU) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_BLTU) Opcode() opcodes.Opcode {
@@ -372,8 +525,26 @@ type OP_BGEU struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_BGEU) Describe() string {
-	return "BGEU"
+var _ fmt.Stringer = OP_BGEU{}
+
+func (o OP_BGEU) String() string {
+	return strings.Join([]string{"BGEU", o.bimm12(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_BGEU) bimm12() string {
+	if o.BIMM12 == 0 {
+		return "bimm12=0"
+	} else {
+		return fmt.Sprintf("bimm12=%#x (%d)", uint64(o.BIMM12), o.BIMM12)
+	}
+}
+
+func (o OP_BGEU) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_BGEU) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_BGEU) Opcode() opcodes.Opcode {
@@ -413,8 +584,26 @@ type OP_LB struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_LB) Describe() string {
-	return "LB"
+var _ fmt.Stringer = OP_LB{}
+
+func (o OP_LB) String() string {
+	return strings.Join([]string{"LB", o.rd(), o.rs1(), o.imm12()}, " ")
+}
+
+func (o OP_LB) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_LB) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_LB) imm12() string {
+	if o.IMM12 == 0 {
+		return "imm12=0"
+	} else {
+		return fmt.Sprintf("imm12=%#x (%d)", uint64(o.IMM12), o.IMM12)
+	}
 }
 
 func (o OP_LB) Opcode() opcodes.Opcode {
@@ -453,8 +642,26 @@ type OP_LH struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_LH) Describe() string {
-	return "LH"
+var _ fmt.Stringer = OP_LH{}
+
+func (o OP_LH) String() string {
+	return strings.Join([]string{"LH", o.rd(), o.rs1(), o.imm12()}, " ")
+}
+
+func (o OP_LH) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_LH) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_LH) imm12() string {
+	if o.IMM12 == 0 {
+		return "imm12=0"
+	} else {
+		return fmt.Sprintf("imm12=%#x (%d)", uint64(o.IMM12), o.IMM12)
+	}
 }
 
 func (o OP_LH) Opcode() opcodes.Opcode {
@@ -493,8 +700,26 @@ type OP_LW struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_LW) Describe() string {
-	return "LW"
+var _ fmt.Stringer = OP_LW{}
+
+func (o OP_LW) String() string {
+	return strings.Join([]string{"LW", o.rd(), o.rs1(), o.imm12()}, " ")
+}
+
+func (o OP_LW) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_LW) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_LW) imm12() string {
+	if o.IMM12 == 0 {
+		return "imm12=0"
+	} else {
+		return fmt.Sprintf("imm12=%#x (%d)", uint64(o.IMM12), o.IMM12)
+	}
 }
 
 func (o OP_LW) Opcode() opcodes.Opcode {
@@ -533,8 +758,26 @@ type OP_LBU struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_LBU) Describe() string {
-	return "LBU"
+var _ fmt.Stringer = OP_LBU{}
+
+func (o OP_LBU) String() string {
+	return strings.Join([]string{"LBU", o.rd(), o.rs1(), o.imm12()}, " ")
+}
+
+func (o OP_LBU) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_LBU) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_LBU) imm12() string {
+	if o.IMM12 == 0 {
+		return "imm12=0"
+	} else {
+		return fmt.Sprintf("imm12=%#x (%d)", uint64(o.IMM12), o.IMM12)
+	}
 }
 
 func (o OP_LBU) Opcode() opcodes.Opcode {
@@ -573,8 +816,26 @@ type OP_LHU struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_LHU) Describe() string {
-	return "LHU"
+var _ fmt.Stringer = OP_LHU{}
+
+func (o OP_LHU) String() string {
+	return strings.Join([]string{"LHU", o.rd(), o.rs1(), o.imm12()}, " ")
+}
+
+func (o OP_LHU) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_LHU) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_LHU) imm12() string {
+	if o.IMM12 == 0 {
+		return "imm12=0"
+	} else {
+		return fmt.Sprintf("imm12=%#x (%d)", uint64(o.IMM12), o.IMM12)
+	}
 }
 
 func (o OP_LHU) Opcode() opcodes.Opcode {
@@ -613,8 +874,26 @@ type OP_SB struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_SB) Describe() string {
-	return "SB"
+var _ fmt.Stringer = OP_SB{}
+
+func (o OP_SB) String() string {
+	return strings.Join([]string{"SB", o.imm12(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_SB) imm12() string {
+	if o.IMM12 == 0 {
+		return "imm12=0"
+	} else {
+		return fmt.Sprintf("imm12=%#x (%d)", uint64(o.IMM12), o.IMM12)
+	}
+}
+
+func (o OP_SB) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_SB) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_SB) Opcode() opcodes.Opcode {
@@ -654,8 +933,26 @@ type OP_SH struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_SH) Describe() string {
-	return "SH"
+var _ fmt.Stringer = OP_SH{}
+
+func (o OP_SH) String() string {
+	return strings.Join([]string{"SH", o.imm12(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_SH) imm12() string {
+	if o.IMM12 == 0 {
+		return "imm12=0"
+	} else {
+		return fmt.Sprintf("imm12=%#x (%d)", uint64(o.IMM12), o.IMM12)
+	}
+}
+
+func (o OP_SH) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_SH) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_SH) Opcode() opcodes.Opcode {
@@ -695,8 +992,26 @@ type OP_SW struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_SW) Describe() string {
-	return "SW"
+var _ fmt.Stringer = OP_SW{}
+
+func (o OP_SW) String() string {
+	return strings.Join([]string{"SW", o.imm12(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_SW) imm12() string {
+	if o.IMM12 == 0 {
+		return "imm12=0"
+	} else {
+		return fmt.Sprintf("imm12=%#x (%d)", uint64(o.IMM12), o.IMM12)
+	}
+}
+
+func (o OP_SW) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_SW) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_SW) Opcode() opcodes.Opcode {
@@ -736,8 +1051,26 @@ type OP_ADDI struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_ADDI) Describe() string {
-	return "ADDI"
+var _ fmt.Stringer = OP_ADDI{}
+
+func (o OP_ADDI) String() string {
+	return strings.Join([]string{"ADDI", o.rd(), o.rs1(), o.imm12()}, " ")
+}
+
+func (o OP_ADDI) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_ADDI) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_ADDI) imm12() string {
+	if o.IMM12 == 0 {
+		return "imm12=0"
+	} else {
+		return fmt.Sprintf("imm12=%#x (%d)", uint64(o.IMM12), o.IMM12)
+	}
 }
 
 func (o OP_ADDI) Opcode() opcodes.Opcode {
@@ -776,8 +1109,26 @@ type OP_SLTI struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_SLTI) Describe() string {
-	return "SLTI"
+var _ fmt.Stringer = OP_SLTI{}
+
+func (o OP_SLTI) String() string {
+	return strings.Join([]string{"SLTI", o.rd(), o.rs1(), o.imm12()}, " ")
+}
+
+func (o OP_SLTI) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_SLTI) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_SLTI) imm12() string {
+	if o.IMM12 == 0 {
+		return "imm12=0"
+	} else {
+		return fmt.Sprintf("imm12=%#x (%d)", uint64(o.IMM12), o.IMM12)
+	}
 }
 
 func (o OP_SLTI) Opcode() opcodes.Opcode {
@@ -816,8 +1167,26 @@ type OP_SLTIU struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_SLTIU) Describe() string {
-	return "SLTIU"
+var _ fmt.Stringer = OP_SLTIU{}
+
+func (o OP_SLTIU) String() string {
+	return strings.Join([]string{"SLTIU", o.rd(), o.rs1(), o.imm12()}, " ")
+}
+
+func (o OP_SLTIU) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_SLTIU) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_SLTIU) imm12() string {
+	if o.IMM12 == 0 {
+		return "imm12=0"
+	} else {
+		return fmt.Sprintf("imm12=%#x (%d)", uint64(o.IMM12), o.IMM12)
+	}
 }
 
 func (o OP_SLTIU) Opcode() opcodes.Opcode {
@@ -856,8 +1225,26 @@ type OP_XORI struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_XORI) Describe() string {
-	return "XORI"
+var _ fmt.Stringer = OP_XORI{}
+
+func (o OP_XORI) String() string {
+	return strings.Join([]string{"XORI", o.rd(), o.rs1(), o.imm12()}, " ")
+}
+
+func (o OP_XORI) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_XORI) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_XORI) imm12() string {
+	if o.IMM12 == 0 {
+		return "imm12=0"
+	} else {
+		return fmt.Sprintf("imm12=%#x (%d)", uint64(o.IMM12), o.IMM12)
+	}
 }
 
 func (o OP_XORI) Opcode() opcodes.Opcode {
@@ -896,8 +1283,26 @@ type OP_ORI struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_ORI) Describe() string {
-	return "ORI"
+var _ fmt.Stringer = OP_ORI{}
+
+func (o OP_ORI) String() string {
+	return strings.Join([]string{"ORI", o.rd(), o.rs1(), o.imm12()}, " ")
+}
+
+func (o OP_ORI) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_ORI) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_ORI) imm12() string {
+	if o.IMM12 == 0 {
+		return "imm12=0"
+	} else {
+		return fmt.Sprintf("imm12=%#x (%d)", uint64(o.IMM12), o.IMM12)
+	}
 }
 
 func (o OP_ORI) Opcode() opcodes.Opcode {
@@ -936,8 +1341,26 @@ type OP_ANDI struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_ANDI) Describe() string {
-	return "ANDI"
+var _ fmt.Stringer = OP_ANDI{}
+
+func (o OP_ANDI) String() string {
+	return strings.Join([]string{"ANDI", o.rd(), o.rs1(), o.imm12()}, " ")
+}
+
+func (o OP_ANDI) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_ANDI) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_ANDI) imm12() string {
+	if o.IMM12 == 0 {
+		return "imm12=0"
+	} else {
+		return fmt.Sprintf("imm12=%#x (%d)", uint64(o.IMM12), o.IMM12)
+	}
 }
 
 func (o OP_ANDI) Opcode() opcodes.Opcode {
@@ -976,8 +1399,22 @@ type OP_ADD struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_ADD) Describe() string {
-	return "ADD"
+var _ fmt.Stringer = OP_ADD{}
+
+func (o OP_ADD) String() string {
+	return strings.Join([]string{"ADD", o.rd(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_ADD) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_ADD) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_ADD) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_ADD) Opcode() opcodes.Opcode {
@@ -1016,8 +1453,22 @@ type OP_SUB struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_SUB) Describe() string {
-	return "SUB"
+var _ fmt.Stringer = OP_SUB{}
+
+func (o OP_SUB) String() string {
+	return strings.Join([]string{"SUB", o.rd(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_SUB) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_SUB) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_SUB) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_SUB) Opcode() opcodes.Opcode {
@@ -1056,8 +1507,22 @@ type OP_SLL struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_SLL) Describe() string {
-	return "SLL"
+var _ fmt.Stringer = OP_SLL{}
+
+func (o OP_SLL) String() string {
+	return strings.Join([]string{"SLL", o.rd(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_SLL) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_SLL) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_SLL) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_SLL) Opcode() opcodes.Opcode {
@@ -1096,8 +1561,22 @@ type OP_SLT struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_SLT) Describe() string {
-	return "SLT"
+var _ fmt.Stringer = OP_SLT{}
+
+func (o OP_SLT) String() string {
+	return strings.Join([]string{"SLT", o.rd(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_SLT) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_SLT) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_SLT) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_SLT) Opcode() opcodes.Opcode {
@@ -1136,8 +1615,22 @@ type OP_SLTU struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_SLTU) Describe() string {
-	return "SLTU"
+var _ fmt.Stringer = OP_SLTU{}
+
+func (o OP_SLTU) String() string {
+	return strings.Join([]string{"SLTU", o.rd(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_SLTU) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_SLTU) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_SLTU) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_SLTU) Opcode() opcodes.Opcode {
@@ -1176,8 +1669,22 @@ type OP_XOR struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_XOR) Describe() string {
-	return "XOR"
+var _ fmt.Stringer = OP_XOR{}
+
+func (o OP_XOR) String() string {
+	return strings.Join([]string{"XOR", o.rd(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_XOR) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_XOR) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_XOR) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_XOR) Opcode() opcodes.Opcode {
@@ -1216,8 +1723,22 @@ type OP_SRL struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_SRL) Describe() string {
-	return "SRL"
+var _ fmt.Stringer = OP_SRL{}
+
+func (o OP_SRL) String() string {
+	return strings.Join([]string{"SRL", o.rd(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_SRL) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_SRL) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_SRL) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_SRL) Opcode() opcodes.Opcode {
@@ -1256,8 +1777,22 @@ type OP_SRA struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_SRA) Describe() string {
-	return "SRA"
+var _ fmt.Stringer = OP_SRA{}
+
+func (o OP_SRA) String() string {
+	return strings.Join([]string{"SRA", o.rd(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_SRA) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_SRA) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_SRA) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_SRA) Opcode() opcodes.Opcode {
@@ -1296,8 +1831,22 @@ type OP_OR struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_OR) Describe() string {
-	return "OR"
+var _ fmt.Stringer = OP_OR{}
+
+func (o OP_OR) String() string {
+	return strings.Join([]string{"OR", o.rd(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_OR) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_OR) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_OR) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_OR) Opcode() opcodes.Opcode {
@@ -1336,8 +1885,22 @@ type OP_AND struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_AND) Describe() string {
-	return "AND"
+var _ fmt.Stringer = OP_AND{}
+
+func (o OP_AND) String() string {
+	return strings.Join([]string{"AND", o.rd(), o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_AND) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_AND) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_AND) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_AND) Opcode() opcodes.Opcode {
@@ -1376,8 +1939,42 @@ type OP_FENCE struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_FENCE) Describe() string {
-	return "FENCE"
+var _ fmt.Stringer = OP_FENCE{}
+
+func (o OP_FENCE) String() string {
+	return strings.Join([]string{"FENCE", o.fm(), o.pred(), o.succ(), o.rs1(), o.rd()}, " ")
+}
+
+func (o OP_FENCE) fm() string {
+	if o.FM == 0 {
+		return "fm=0"
+	} else {
+		return fmt.Sprintf("fm=%#x (%d)", uint64(o.FM), o.FM)
+	}
+}
+
+func (o OP_FENCE) pred() string {
+	if o.PRED == 0 {
+		return "pred=0"
+	} else {
+		return fmt.Sprintf("pred=%#x (%d)", uint64(o.PRED), o.PRED)
+	}
+}
+
+func (o OP_FENCE) succ() string {
+	if o.SUCC == 0 {
+		return "succ=0"
+	} else {
+		return fmt.Sprintf("succ=%#x (%d)", uint64(o.SUCC), o.SUCC)
+	}
+}
+
+func (o OP_FENCE) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_FENCE) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
 }
 
 func (o OP_FENCE) Opcode() opcodes.Opcode {
@@ -1420,8 +2017,10 @@ type OP_ECALL struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_ECALL) Describe() string {
-	return "ECALL"
+var _ fmt.Stringer = OP_ECALL{}
+
+func (o OP_ECALL) String() string {
+	return strings.Join([]string{"ECALL"}, " ")
 }
 
 func (o OP_ECALL) Opcode() opcodes.Opcode {
@@ -1453,8 +2052,10 @@ type OP_EBREAK struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_EBREAK) Describe() string {
-	return "EBREAK"
+var _ fmt.Stringer = OP_EBREAK{}
+
+func (o OP_EBREAK) String() string {
+	return strings.Join([]string{"EBREAK"}, " ")
 }
 
 func (o OP_EBREAK) Opcode() opcodes.Opcode {
@@ -1486,8 +2087,26 @@ type OP_SLLI struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_SLLI) Describe() string {
-	return "SLLI"
+var _ fmt.Stringer = OP_SLLI{}
+
+func (o OP_SLLI) String() string {
+	return strings.Join([]string{"SLLI", o.rd(), o.rs1(), o.shamtw()}, " ")
+}
+
+func (o OP_SLLI) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_SLLI) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_SLLI) shamtw() string {
+	if o.SHAMTW == 0 {
+		return "shamtw=0"
+	} else {
+		return fmt.Sprintf("shamtw=%#x (%d)", uint64(o.SHAMTW), o.SHAMTW)
+	}
 }
 
 func (o OP_SLLI) Opcode() opcodes.Opcode {
@@ -1526,8 +2145,26 @@ type OP_SRLI struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_SRLI) Describe() string {
-	return "SRLI"
+var _ fmt.Stringer = OP_SRLI{}
+
+func (o OP_SRLI) String() string {
+	return strings.Join([]string{"SRLI", o.rd(), o.rs1(), o.shamtw()}, " ")
+}
+
+func (o OP_SRLI) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_SRLI) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_SRLI) shamtw() string {
+	if o.SHAMTW == 0 {
+		return "shamtw=0"
+	} else {
+		return fmt.Sprintf("shamtw=%#x (%d)", uint64(o.SHAMTW), o.SHAMTW)
+	}
 }
 
 func (o OP_SRLI) Opcode() opcodes.Opcode {
@@ -1566,8 +2203,26 @@ type OP_SRAI struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_SRAI) Describe() string {
-	return "SRAI"
+var _ fmt.Stringer = OP_SRAI{}
+
+func (o OP_SRAI) String() string {
+	return strings.Join([]string{"SRAI", o.rd(), o.rs1(), o.shamtw()}, " ")
+}
+
+func (o OP_SRAI) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_SRAI) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_SRAI) shamtw() string {
+	if o.SHAMTW == 0 {
+		return "shamtw=0"
+	} else {
+		return fmt.Sprintf("shamtw=%#x (%d)", uint64(o.SHAMTW), o.SHAMTW)
+	}
 }
 
 func (o OP_SRAI) Opcode() opcodes.Opcode {

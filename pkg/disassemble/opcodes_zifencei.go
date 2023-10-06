@@ -4,6 +4,9 @@
 package disassemble
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/hawkowl/biscuit/pkg/debuginfo"
 	"github.com/hawkowl/biscuit/pkg/opcodes"
 )
@@ -13,8 +16,26 @@ type OP_FENCE_I struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_FENCE_I) Describe() string {
-	return "FENCE_I"
+var _ fmt.Stringer = OP_FENCE_I{}
+
+func (o OP_FENCE_I) String() string {
+	return strings.Join([]string{"FENCE_I", o.imm12(), o.rs1(), o.rd()}, " ")
+}
+
+func (o OP_FENCE_I) imm12() string {
+	if o.IMM12 == 0 {
+		return "imm12=0"
+	} else {
+		return fmt.Sprintf("imm12=%#x (%d)", uint64(o.IMM12), o.IMM12)
+	}
+}
+
+func (o OP_FENCE_I) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_FENCE_I) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
 }
 
 func (o OP_FENCE_I) Opcode() opcodes.Opcode {

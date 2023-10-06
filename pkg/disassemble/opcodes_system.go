@@ -4,6 +4,9 @@
 package disassemble
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/hawkowl/biscuit/pkg/debuginfo"
 	"github.com/hawkowl/biscuit/pkg/opcodes"
 )
@@ -13,8 +16,10 @@ type OP_MRET struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_MRET) Describe() string {
-	return "MRET"
+var _ fmt.Stringer = OP_MRET{}
+
+func (o OP_MRET) String() string {
+	return strings.Join([]string{"MRET"}, " ")
 }
 
 func (o OP_MRET) Opcode() opcodes.Opcode {
@@ -46,8 +51,10 @@ type OP_DRET struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_DRET) Describe() string {
-	return "DRET"
+var _ fmt.Stringer = OP_DRET{}
+
+func (o OP_DRET) String() string {
+	return strings.Join([]string{"DRET"}, " ")
 }
 
 func (o OP_DRET) Opcode() opcodes.Opcode {
@@ -79,8 +86,10 @@ type OP_WFI struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_WFI) Describe() string {
-	return "WFI"
+var _ fmt.Stringer = OP_WFI{}
+
+func (o OP_WFI) String() string {
+	return strings.Join([]string{"WFI"}, " ")
 }
 
 func (o OP_WFI) Opcode() opcodes.Opcode {

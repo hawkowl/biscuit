@@ -4,6 +4,9 @@
 package disassemble
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/hawkowl/biscuit/pkg/debuginfo"
 	"github.com/hawkowl/biscuit/pkg/opcodes"
 )
@@ -13,8 +16,18 @@ type OP_SFENCE_VMA struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_SFENCE_VMA) Describe() string {
-	return "SFENCE_VMA"
+var _ fmt.Stringer = OP_SFENCE_VMA{}
+
+func (o OP_SFENCE_VMA) String() string {
+	return strings.Join([]string{"SFENCE_VMA", o.rs1(), o.rs2()}, " ")
+}
+
+func (o OP_SFENCE_VMA) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_SFENCE_VMA) rs2() string {
+	return fmt.Sprintf("rs2=x%d", o.RS2)
 }
 
 func (o OP_SFENCE_VMA) Opcode() opcodes.Opcode {
@@ -51,8 +64,10 @@ type OP_SRET struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_SRET) Describe() string {
-	return "SRET"
+var _ fmt.Stringer = OP_SRET{}
+
+func (o OP_SRET) String() string {
+	return strings.Join([]string{"SRET"}, " ")
 }
 
 func (o OP_SRET) Opcode() opcodes.Opcode {

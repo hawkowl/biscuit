@@ -1,72 +1,32 @@
 package disassemble
 
 import (
-	"fmt"
 	"testing"
+
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
 )
 
-func TestADDI(t *testing.T) {
-	testCases := []struct {
-		input    uint32
-		expected OP_ADDI
-	}{
-		{
-			input:    0x67838393,
-			expected: ADDI(7, 7, 1656, nil),
-		},
-	}
-	for _, tC := range testCases {
-		funcName := fmt.Sprintf("%#v", tC.input)
-
-		t.Run(funcName, func(t *testing.T) {
-			out := DecodeADDI(tC.input)
-			if out != tC.expected {
-				t.Errorf("got %v, expected %v", out, tC.expected)
-			}
-		})
-	}
+var opcodetests = []TableEntry{
+	Entry("0x01d72223", 0x01d72223, SW(4, 14, 29, nil)),
+	Entry("0xfc3f2223", 0xfc3f2223, SW(-60, 30, 3, nil)),
+	Entry("slli", 0x01f51513, SLLI(10, 10, 31, nil)),
+	Entry("beq", 0xfee786e3, BEQ(-20, 15, 14, nil)),
+	Entry("addi", 0x67838393, ADDI(7, 7, 1656, nil)),
 }
 
-func TestBEQ(t *testing.T) {
-	testCases := []struct {
-		input    uint32
-		expected OP_BEQ
-	}{
-		{
-			input:    0xfee786e3,
-			expected: BEQ(-20, 15, 14, nil),
-		},
-	}
-	for _, tC := range testCases {
-		funcName := fmt.Sprintf("%#v", tC.input)
+var _ = Describe("Opcodes", func() {
 
-		t.Run(funcName, func(t *testing.T) {
-			out := DecodeBEQ(tC.input)
-			if out != tC.expected {
-				t.Errorf("got %v, expected %v", out, tC.expected)
-			}
-		})
-	}
-}
+	var _ = DescribeTable("things", func(input int, expected Opcode) {
+		out, err := Match(uint32(input))
+		Expect(err).To(BeNil())
 
-func TestSW(t *testing.T) {
-	testCases := []struct {
-		input    uint32
-		expected OP_SW
-	}{
-		{
-			input:    0x01d72223,
-			expected: SW(4, 14, 29, nil),
-		},
-	}
-	for _, tC := range testCases {
-		funcName := fmt.Sprintf("%#v", tC.input)
+		Expect(out).To(Equal(expected))
+	}, opcodetests)
 
-		t.Run(funcName, func(t *testing.T) {
-			out := DecodeSW(tC.input)
-			if out != tC.expected {
-				t.Errorf("got %v, expected %v", out, tC.expected)
-			}
-		})
-	}
+})
+
+func TestOpcodes(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "Opcodes Suite")
 }

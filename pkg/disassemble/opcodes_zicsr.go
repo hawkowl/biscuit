@@ -4,6 +4,9 @@
 package disassemble
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/hawkowl/biscuit/pkg/debuginfo"
 	"github.com/hawkowl/biscuit/pkg/opcodes"
 )
@@ -13,8 +16,26 @@ type OP_CSRRW struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_CSRRW) Describe() string {
-	return "CSRRW"
+var _ fmt.Stringer = OP_CSRRW{}
+
+func (o OP_CSRRW) String() string {
+	return strings.Join([]string{"CSRRW", o.rd(), o.rs1(), o.csr()}, " ")
+}
+
+func (o OP_CSRRW) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_CSRRW) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_CSRRW) csr() string {
+	if o.CSR == 0 {
+		return "csr=0"
+	} else {
+		return fmt.Sprintf("csr=%#x (%d)", uint64(o.CSR), o.CSR)
+	}
 }
 
 func (o OP_CSRRW) Opcode() opcodes.Opcode {
@@ -53,8 +74,26 @@ type OP_CSRRS struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_CSRRS) Describe() string {
-	return "CSRRS"
+var _ fmt.Stringer = OP_CSRRS{}
+
+func (o OP_CSRRS) String() string {
+	return strings.Join([]string{"CSRRS", o.rd(), o.rs1(), o.csr()}, " ")
+}
+
+func (o OP_CSRRS) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_CSRRS) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_CSRRS) csr() string {
+	if o.CSR == 0 {
+		return "csr=0"
+	} else {
+		return fmt.Sprintf("csr=%#x (%d)", uint64(o.CSR), o.CSR)
+	}
 }
 
 func (o OP_CSRRS) Opcode() opcodes.Opcode {
@@ -93,8 +132,26 @@ type OP_CSRRC struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_CSRRC) Describe() string {
-	return "CSRRC"
+var _ fmt.Stringer = OP_CSRRC{}
+
+func (o OP_CSRRC) String() string {
+	return strings.Join([]string{"CSRRC", o.rd(), o.rs1(), o.csr()}, " ")
+}
+
+func (o OP_CSRRC) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_CSRRC) rs1() string {
+	return fmt.Sprintf("rs1=x%d", o.RS1)
+}
+
+func (o OP_CSRRC) csr() string {
+	if o.CSR == 0 {
+		return "csr=0"
+	} else {
+		return fmt.Sprintf("csr=%#x (%d)", uint64(o.CSR), o.CSR)
+	}
 }
 
 func (o OP_CSRRC) Opcode() opcodes.Opcode {
@@ -133,8 +190,30 @@ type OP_CSRRWI struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_CSRRWI) Describe() string {
-	return "CSRRWI"
+var _ fmt.Stringer = OP_CSRRWI{}
+
+func (o OP_CSRRWI) String() string {
+	return strings.Join([]string{"CSRRWI", o.rd(), o.csr(), o.zimm()}, " ")
+}
+
+func (o OP_CSRRWI) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_CSRRWI) csr() string {
+	if o.CSR == 0 {
+		return "csr=0"
+	} else {
+		return fmt.Sprintf("csr=%#x (%d)", uint64(o.CSR), o.CSR)
+	}
+}
+
+func (o OP_CSRRWI) zimm() string {
+	if o.ZIMM == 0 {
+		return "zimm=0"
+	} else {
+		return fmt.Sprintf("zimm=%#x (%d)", uint64(o.ZIMM), o.ZIMM)
+	}
 }
 
 func (o OP_CSRRWI) Opcode() opcodes.Opcode {
@@ -173,8 +252,30 @@ type OP_CSRRSI struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_CSRRSI) Describe() string {
-	return "CSRRSI"
+var _ fmt.Stringer = OP_CSRRSI{}
+
+func (o OP_CSRRSI) String() string {
+	return strings.Join([]string{"CSRRSI", o.rd(), o.csr(), o.zimm()}, " ")
+}
+
+func (o OP_CSRRSI) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_CSRRSI) csr() string {
+	if o.CSR == 0 {
+		return "csr=0"
+	} else {
+		return fmt.Sprintf("csr=%#x (%d)", uint64(o.CSR), o.CSR)
+	}
+}
+
+func (o OP_CSRRSI) zimm() string {
+	if o.ZIMM == 0 {
+		return "zimm=0"
+	} else {
+		return fmt.Sprintf("zimm=%#x (%d)", uint64(o.ZIMM), o.ZIMM)
+	}
 }
 
 func (o OP_CSRRSI) Opcode() opcodes.Opcode {
@@ -213,8 +314,30 @@ type OP_CSRRCI struct {
 	debug debuginfo.DebugInfo
 }
 
-func (o OP_CSRRCI) Describe() string {
-	return "CSRRCI"
+var _ fmt.Stringer = OP_CSRRCI{}
+
+func (o OP_CSRRCI) String() string {
+	return strings.Join([]string{"CSRRCI", o.rd(), o.csr(), o.zimm()}, " ")
+}
+
+func (o OP_CSRRCI) rd() string {
+	return fmt.Sprintf("rd=x%d", o.RD)
+}
+
+func (o OP_CSRRCI) csr() string {
+	if o.CSR == 0 {
+		return "csr=0"
+	} else {
+		return fmt.Sprintf("csr=%#x (%d)", uint64(o.CSR), o.CSR)
+	}
+}
+
+func (o OP_CSRRCI) zimm() string {
+	if o.ZIMM == 0 {
+		return "zimm=0"
+	} else {
+		return fmt.Sprintf("zimm=%#x (%d)", uint64(o.ZIMM), o.ZIMM)
+	}
 }
 
 func (o OP_CSRRCI) Opcode() opcodes.Opcode {
