@@ -22,9 +22,17 @@ func (o OP_SFENCE_VMA) Components() Components {
 	}
 }
 
+func (o OP_SFENCE_VMA) Instruction() string {
+	return "SFENCE_VMA"
+}
+
 type OP_SRET struct {
 }
 
 func (o OP_SRET) Components() Components {
 	return Components{}
+}
+
+func (o OP_SRET) Instruction() string {
+	return "SRET"
 }

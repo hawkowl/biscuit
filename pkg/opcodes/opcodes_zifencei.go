@@ -21,3 +21,7 @@ func (o OP_FENCE_I) Components() Components {
 		RD:    o.RD,
 	}
 }
+
+func (o OP_FENCE_I) Instruction() string {
+	return "FENCE_I"
+}

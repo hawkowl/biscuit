@@ -19,6 +19,10 @@ func (o OP_MRET) Components() Components {
 	return Components{}
 }
 
+func (o OP_MRET) Instruction() string {
+	return "MRET"
+}
+
 type OP_DRET struct {
 }
 
@@ -26,9 +30,17 @@ func (o OP_DRET) Components() Components {
 	return Components{}
 }
 
+func (o OP_DRET) Instruction() string {
+	return "DRET"
+}
+
 type OP_WFI struct {
 }
 
 func (o OP_WFI) Components() Components {
 	return Components{}
+}
+
+func (o OP_WFI) Instruction() string {
+	return "WFI"
 }

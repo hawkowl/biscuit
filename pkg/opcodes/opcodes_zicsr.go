@@ -32,6 +32,10 @@ func (o OP_CSRRW) Components() Components {
 	}
 }
 
+func (o OP_CSRRW) Instruction() string {
+	return "CSRRW"
+}
+
 type OP_CSRRS struct {
 	RD  uint32
 	RS1 uint32
@@ -44,6 +48,10 @@ func (o OP_CSRRS) Components() Components {
 		RS1: o.RS1,
 		CSR: o.CSR,
 	}
+}
+
+func (o OP_CSRRS) Instruction() string {
+	return "CSRRS"
 }
 
 type OP_CSRRC struct {
@@ -60,6 +68,10 @@ func (o OP_CSRRC) Components() Components {
 	}
 }
 
+func (o OP_CSRRC) Instruction() string {
+	return "CSRRC"
+}
+
 type OP_CSRRWI struct {
 	RD   uint32
 	CSR  uint32
@@ -72,6 +84,10 @@ func (o OP_CSRRWI) Components() Components {
 		CSR:  o.CSR,
 		ZIMM: o.ZIMM,
 	}
+}
+
+func (o OP_CSRRWI) Instruction() string {
+	return "CSRRWI"
 }
 
 type OP_CSRRSI struct {
@@ -88,6 +104,10 @@ func (o OP_CSRRSI) Components() Components {
 	}
 }
 
+func (o OP_CSRRSI) Instruction() string {
+	return "CSRRSI"
+}
+
 type OP_CSRRCI struct {
 	RD   uint32
 	CSR  uint32
@@ -100,4 +120,8 @@ func (o OP_CSRRCI) Components() Components {
 		CSR:  o.CSR,
 		ZIMM: o.ZIMM,
 	}
+}
+
+func (o OP_CSRRCI) Instruction() string {
+	return "CSRRCI"
 }
