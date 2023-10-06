@@ -5,7 +5,7 @@ import (
 	"io"
 )
 
-func Decode(buf io.ReadSeeker) ([]Opcode, error) {
+func Decode(buf io.Reader) ([]Opcode, error) {
 	i := make([]Opcode, 0)
 	b := make([]byte, 1)
 	location := 0

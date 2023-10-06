@@ -5,8 +5,8 @@ package opcodes
 
 const (
     {{ range .Opcodes -}}
-        MASK_{{.Name}} uint32 = {{ printf "0x%08X" .Mask }} 
-        MATCH_{{.Name}} uint32 = {{ printf "0x%08X" .Match }} 
+        MASK_{{.Name}} uint32 = {{ printf "0x%08X" .Mask }}
+        MATCH_{{.Name}} uint32 = {{ printf "0x%08X" .Match }}
     {{ end -}}
 )
 
@@ -23,6 +23,10 @@ func (o OP_{{.Name}}) Components() Components {
 		{{ index . 0 }}: o.{{ index . 0 }},
 	{{ end -}}
     }
+}
+
+func (o OP_{{.Name}}) Instruction() string {
+    return "{{.Name}}"
 }
 
 {{ end -}}
